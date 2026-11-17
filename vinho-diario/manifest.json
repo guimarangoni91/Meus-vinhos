@@ -1,0 +1,25 @@
+{
+  "name": "VinoMemo — Diário de Rótulos, Adega & Memórias",
+  "short_name": "VinoMemo",
+  "description": "Aplicativo para registrar rótulos de vinho, adega virtual, avaliações e fotos de lembrança do dia.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF6F0",
+  "theme_color": "#6B1D2F",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

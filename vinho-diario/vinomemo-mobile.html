@@ -1,0 +1,5249 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VinoMemo — Diário de Rótulos, Adega & Memórias</title>
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='42' fill='%236B1D2F'/%3E%3Cpath d='M62 32h68l-6 54c-2 20-15 35-28 35s-26-15-28-35l-6-54z' fill='none' stroke='%23F4D284' stroke-width='9' stroke-linejoin='round'/%3E%3Cpath d='M66 76c14 7 24-6 38 0 10 4 17 1 22-2' fill='none' stroke='%23F4D284' stroke-width='8' stroke-linecap='round'/%3E%3Cline x1='96' y1='121' x2='96' y2='160' stroke='%23F4D284' stroke-width='9' stroke-linecap='round'/%3E%3Cline x1='70' y1='160' x2='122' y2='160' stroke='%23F4D284' stroke-width='9' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='42' fill='%236B1D2F'/%3E%3Cpath d='M62 32h68l-6 54c-2 20-15 35-28 35s-26-15-28-35l-6-54z' fill='none' stroke='%23F4D284' stroke-width='9' stroke-linejoin='round'/%3E%3Cpath d='M66 76c14 7 24-6 38 0 10 4 17 1 22-2' fill='none' stroke='%23F4D284' stroke-width='8' stroke-linecap='round'/%3E%3Cline x1='96' y1='121' x2='96' y2='160' stroke='%23F4D284' stroke-width='9' stroke-linecap='round'/%3E%3Cline x1='70' y1='160' x2='122' y2='160' stroke='%23F4D284' stroke-width='9' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#6B1D2F" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="VinoMemo" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg-main: #FAF6F0;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #F3ECE1;
+  --bg-subtle: #EFE7DA;
+  --text-main: #1F1618;
+  --text-secondary: #5C4B4E;
+  --text-muted: #8B777B;
+  --wine-primary: #6B1D2F;
+  --wine-primary-hover: #531423;
+  --wine-light: #F7EBEF;
+  --gold-accent: #C59B48;
+  --gold-soft: #FBF5E6;
+  --border-color: #E4D9C8;
+  --shadow-sm: 0 2px 8px rgba(31, 22, 24, 0.05);
+  --shadow-md: 0 10px 28px rgba(31, 22, 24, 0.09);
+  --shadow-lg: 0 20px 50px rgba(31, 22, 24, 0.18);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+[data-theme="dark"] {
+  --bg-main: #140F11;
+  --bg-card: #1F171A;
+  --bg-elevated: #2A1F23;
+  --bg-subtle: #251B1E;
+  --text-main: #F6EFEA;
+  --text-secondary: #C6B5B8;
+  --text-muted: #8E7B7F;
+  --wine-primary: #A6344E;
+  --wine-primary-hover: #C0415E;
+  --wine-light: #331B22;
+  --gold-accent: #DFB45B;
+  --gold-soft: #2B2418;
+  --border-color: #36282C;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.65);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  min-height: 100vh;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Header */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.header-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0.85rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-emblem {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--wine-primary);
+  color: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(107, 29, 47, 0.28);
+}
+
+.brand-emblem svg {
+  width: 26px;
+  height: 26px;
+}
+
+.brand-title {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--text-main);
+}
+
+.brand-subtitle {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Navigation Tabs */
+.main-nav {
+  display: flex;
+  background: var(--bg-elevated);
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  gap: 4px;
+}
+
+.nav-tab {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.2s ease;
+}
+
+.nav-tab:hover {
+  color: var(--text-main);
+}
+
+.nav-tab.active {
+  background: var(--bg-card);
+  color: var(--wine-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-badge {
+  background: var(--wine-primary);
+  color: #FFF;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+  line-height: 1.3;
+}
+
+.cellar-banner {
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--gold-soft) 100%);
+  border: 1px solid var(--gold-accent);
+  border-radius: var(--radius-lg);
+  padding: 1.4rem 1.6rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-sm);
+}
+
+.cellar-banner .section-subtitle {
+  max-width: 680px;
+  margin-top: 0.25rem;
+}
+
+/* Mini Dashboard da Adega Virtual */
+.cellar-mini-dashboard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.25rem;
+  margin-bottom: 1.35rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cellar-dash-top {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 0.85rem;
+}
+
+.cellar-stat-box {
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.75rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cellar-stat-num {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--wine-primary);
+  line-height: 1.1;
+}
+
+.cellar-stat-label {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.cellar-type-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cellar-breakdown-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cellar-stacked-bar {
+  height: 12px;
+  background: var(--bg-elevated);
+  border-radius: 999px;
+  overflow: hidden;
+  display: flex;
+  gap: 2px;
+}
+
+.stacked-segment {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.seg-tinto { background: #7B1E34; }
+.seg-branco { background: #E4C97A; }
+.seg-rose { background: #E58C9A; }
+.seg-espumante { background: #C59B48; }
+.seg-fortificado { background: #9C4221; }
+
+.cellar-legend-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cellar-legend-item {
+  font-size: 0.78rem;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.cellar-highlights-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--border-color);
+}
+
+.cellar-highlight-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.cellar-highlight-group strong {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.cellar-tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.cellar-qty-badge {
+  background: rgba(25, 18, 20, 0.88);
+  color: #F4D284;
+  padding: 0.3rem 0.72rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  backdrop-filter: blur(6px);
+}
+
+.cellar-card-footer {
+  margin-top: auto;
+  padding-top: 0.85rem;
+  border-top: 1px dashed var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.cellar-qty-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 2px 6px;
+}
+
+.qty-btn {
+  border: none;
+  background: var(--bg-card);
+  color: var(--text-main);
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qty-btn:hover {
+  background: var(--wine-primary);
+  color: #FFF;
+}
+
+.cellar-action-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-drink-evaluate {
+  flex: 1;
+  background: linear-gradient(135deg, #6B1D2F 0%, #8E243D 100%);
+  color: #FFF;
+  border: none;
+  padding: 0.65rem 0.9rem;
+  border-radius: 10px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  box-shadow: 0 4px 12px rgba(107, 29, 47, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-drink-evaluate:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(107, 29, 47, 0.35);
+}
+
+.from-cellar-alert {
+  background: var(--gold-soft);
+  border: 1px solid var(--gold-accent);
+  color: var(--text-main);
+  padding: 0.9rem 1.15rem;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.cloud-status-btn {
+  border: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+  color: var(--text-main);
+  padding: 0.48rem 0.85rem;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.2s ease;
+}
+
+.cloud-status-btn:hover {
+  border-color: var(--wine-primary);
+}
+
+.cloud-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #9E9E9E;
+}
+
+.cloud-status-btn.connected .cloud-dot {
+  background: #2E7D32;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.22);
+}
+
+.cloud-status-btn.syncing .cloud-dot {
+  background: #E6A100;
+  animation: pulseDot 1s infinite;
+}
+
+.cloud-status-btn.error .cloud-dot {
+  background: #C62828;
+}
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.55; }
+}
+
+.cloud-guide-box {
+  background: var(--gold-soft);
+  border: 1px solid var(--gold-accent);
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  font-size: 0.86rem;
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.cloud-steps-details {
+  margin-top: 0.3rem;
+}
+
+.cloud-steps-details summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--wine-primary);
+}
+
+.cloud-steps-details ol {
+  margin-top: 0.6rem;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+}
+
+.cloud-steps-details a {
+  color: var(--wine-primary);
+  font-weight: 600;
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  border-color: var(--wine-primary);
+  color: var(--wine-primary);
+  background: var(--wine-light);
+}
+
+.btn-primary {
+  background: var(--wine-primary);
+  color: #FFFFFF;
+  border: none;
+  padding: 0.62rem 1.15rem;
+  border-radius: 10px;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  transition: background 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 4px 12px rgba(107, 29, 47, 0.25);
+}
+
+.btn-primary:hover {
+  background: var(--wine-primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--bg-elevated);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 0.6rem 1.1rem;
+  border-radius: 10px;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--wine-primary);
+  color: var(--wine-primary);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px dashed var(--border-color);
+  padding: 0.55rem 1rem;
+  border-radius: 10px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  border-color: var(--gold-accent);
+  color: var(--text-main);
+}
+
+.btn-sm {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.8rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Summary Ribbon */
+.summary-ribbon {
+  background: linear-gradient(90deg, #4B1220 0%, #6B1D2F 50%, #4B1220 100%);
+  color: #FAF6F0;
+  padding: 0.7rem 1.5rem;
+}
+
+.ribbon-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.ribbon-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+}
+
+.ribbon-value {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #F4D284;
+}
+
+.ribbon-label {
+  font-size: 0.78rem;
+  opacity: 0.9;
+  letter-spacing: 0.02em;
+}
+
+.ribbon-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Main Content */
+.main-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 1.75rem 1.5rem 4rem;
+}
+
+.view-section {
+  display: none;
+}
+
+.view-section.active {
+  display: block;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Filter Bar */
+.filter-bar {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.15rem;
+  margin-bottom: 1.6rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-box svg {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 0.72rem 2.4rem 0.72rem 2.65rem;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  transition: border-color 0.2s ease;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: var(--wine-primary);
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0 6px;
+}
+
+.filter-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.type-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.pill {
+  border: 1px solid var(--border-color);
+  background: var(--bg-main);
+  color: var(--text-secondary);
+  padding: 0.38rem 0.85rem;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.18s ease;
+}
+
+.pill:hover {
+  border-color: var(--wine-primary);
+  color: var(--text-main);
+}
+
+.pill.active {
+  background: var(--wine-primary);
+  border-color: var(--wine-primary);
+  color: #FFF;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot-tinto { background: #7B1E34; }
+.dot-branco { background: #E4C97A; }
+.dot-rose { background: #E58C9A; }
+.dot-espumante { background: #F0DFAD; border: 1px solid #C59B48; }
+.dot-fortificado { background: #9C4221; }
+
+.select-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.select-filters select {
+  padding: 0.42rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Wine Grid & Cards */
+.wine-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.wine-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+}
+
+.wine-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--gold-accent);
+}
+
+.card-media {
+  position: relative;
+  height: 230px;
+  background: var(--bg-elevated);
+  overflow: hidden;
+  display: flex;
+}
+
+.card-main-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.wine-card:hover .card-main-photo {
+  transform: scale(1.03);
+}
+
+/* Floating Moment Mini Polaroid inside Card */
+.card-moment-pip {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 72px;
+  height: 78px;
+  background: #FFF;
+  padding: 4px 4px 14px 4px;
+  border-radius: 4px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  transform: rotate(3deg);
+  transition: transform 0.25s ease, width 0.25s ease, height 0.25s ease;
+  z-index: 3;
+}
+
+.wine-card:hover .card-moment-pip {
+  transform: rotate(0deg) scale(1.08);
+}
+
+.card-moment-pip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.card-moment-pip span {
+  display: block;
+  font-size: 0.52rem;
+  color: #333;
+  text-align: center;
+  font-weight: 700;
+  margin-top: 1px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.card-badges-top {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.badge-type {
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+.badge-tinto { background: rgba(107, 29, 47, 0.92); color: #FFF; }
+.badge-branco { background: rgba(242, 222, 160, 0.94); color: #3D2E0A; }
+.badge-rose { background: rgba(226, 125, 144, 0.94); color: #FFF; }
+.badge-espumante { background: rgba(247, 234, 190, 0.95); color: #4A370C; border: 1px solid #C59B48; }
+.badge-fortificado { background: rgba(140, 58, 27, 0.92); color: #FFF; }
+.badge-laranja { background: rgba(217, 119, 36, 0.92); color: #FFF; }
+
+.badge-rating-pill {
+  background: rgba(25, 18, 20, 0.85);
+  color: #F4D284;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  backdrop-filter: blur(6px);
+}
+
+.card-body {
+  padding: 1.15rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.65rem;
+}
+
+.card-winery-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.18;
+  color: var(--text-main);
+}
+
+.card-meta-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.meta-chip {
+  background: var(--bg-elevated);
+  padding: 0.2rem 0.58rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* Mini Sensory Bars on Card */
+.card-sensory-mini {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.45rem;
+  padding: 0.55rem 0.65rem;
+  background: var(--bg-main);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.mini-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.mini-stat-label {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.mini-bar-track {
+  height: 5px;
+  background: var(--border-color);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.mini-bar-fill {
+  height: 100%;
+  background: var(--wine-primary);
+  border-radius: 99px;
+}
+
+.card-notes-excerpt {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-style: italic;
+}
+
+.card-memory-footer {
+  margin-top: auto;
+  padding-top: 0.7rem;
+  border-top: 1px dashed var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  gap: 0.5rem;
+}
+
+.memory-context {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rebuy-heart {
+  color: var(--wine-primary);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 1.5rem;
+  background: var(--bg-card);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.empty-illustration {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 1.2rem;
+  border-radius: 50%;
+  background: var(--wine-light);
+  color: var(--wine-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state h2 {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.empty-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Section Headers */
+.section-header {
+  margin-bottom: 1.75rem;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* VIEW 2: POLAROID MEMORIES WALL */
+.memories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.8rem;
+}
+
+.polaroid-card {
+  background: #FFFDF9;
+  color: #1F1618;
+  padding: 14px 14px 20px 14px;
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+  border: 1px solid #E6DEC8;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.polaroid-card:nth-child(odd) {
+  transform: rotate(-1deg);
+}
+
+.polaroid-card:nth-child(even) {
+  transform: rotate(1.2deg);
+}
+
+.polaroid-card:hover {
+  transform: rotate(0deg) translateY(-6px) scale(1.01);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.2);
+}
+
+.polaroid-photo-frame {
+  position: relative;
+  height: 250px;
+  background: #23191B;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.polaroid-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.polaroid-date-stamp {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  background: rgba(20, 15, 17, 0.78);
+  color: #F6D88B;
+  font-family: monospace;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.polaroid-caption-title {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2B181C;
+  line-height: 1.2;
+}
+
+.polaroid-meta {
+  font-size: 0.8rem;
+  color: #6E565B;
+  margin: 4px 0 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.polaroid-quote {
+  font-size: 0.86rem;
+  color: #3D2F32;
+  font-style: italic;
+  background: #F7F2E7;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  border-left: 3px solid #6B1D2F;
+  margin-top: auto;
+}
+
+/* VIEW 3: STATS DASHBOARD */
+.stats-dashboard {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.4rem;
+}
+
+.stat-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.35rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.span-12 { grid-column: span 12; }
+.span-6 { grid-column: span 6; }
+.span-4 { grid-column: span 4; }
+
+.kpi-cards-row {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.kpi-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.kpi-card .kpi-num {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--wine-primary);
+  line-height: 1.1;
+}
+
+.kpi-card .kpi-title {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.stat-panel h3 {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: var(--text-main);
+}
+
+.bar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bar-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bar-row-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.bar-track {
+  height: 9px;
+  background: var(--bg-elevated);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--wine-primary), var(--gold-accent));
+  border-radius: 99px;
+}
+
+/* MODALS */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(16, 10, 12, 0.72);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  overflow-y: auto;
+}
+
+.modal-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: modalSlideUp 0.22s ease;
+}
+
+.modal-large { max-width: 880px; }
+.modal-detail { max-width: 920px; }
+.modal-small { max-width: 480px; }
+
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg-card);
+  padding: 1.25rem 1.6rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-eyebrow {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--wine-primary);
+  font-weight: 700;
+}
+
+.modal-header h2 {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  line-height: 1.15;
+}
+
+.modal-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+  color: var(--text-main);
+  font-size: 1.35rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* FORM STYLING */
+.wine-form {
+  padding: 1.5rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.form-section {
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+}
+
+.form-section-title {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text-main);
+}
+
+.step-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--wine-primary);
+  color: #FFF;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Photo Uploaders */
+.photo-uploaders-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+}
+
+.photo-upload-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.photo-upload-card.memory-highlight {
+  border-color: var(--gold-accent);
+  background: var(--gold-soft);
+}
+
+.photo-card-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-card-header strong {
+  font-size: 0.9rem;
+}
+
+.photo-card-header span {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.photo-dropzone {
+  position: relative;
+  height: 190px;
+  border: 2px dashed var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.photo-dropzone:hover {
+  border-color: var(--wine-primary);
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+.photo-placeholder {
+  text-align: center;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-secondary);
+  font-size: 0.83rem;
+}
+
+.photo-placeholder small {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.photo-preview-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.photo-preview-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-photo-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(20, 15, 17, 0.8);
+  color: #FFF;
+  border: none;
+  font-size: 1.15rem;
+  cursor: pointer;
+}
+
+/* Form Grids */
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0.95rem;
+}
+
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.95rem;
+}
+
+.field-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.section-helper-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  margin-top: -0.4rem;
+}
+
+.didactic-tip {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.45rem;
+  line-height: 1.35;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-group.span-2 {
+  grid-column: span 2;
+}
+
+.form-group label, .sub-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 0.62rem 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--wine-primary);
+}
+
+/* Sensory Sliders */
+.sensory-sliders-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.sensory-slider-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+}
+
+.sensory-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.sensory-slider-header label {
+  font-weight: 700;
+  font-size: 0.86rem;
+}
+
+.sensory-val-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--wine-primary);
+  background: var(--wine-light);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.sensory-slider-item input[type="range"] {
+  width: 100%;
+  accent-color: var(--wine-primary);
+  cursor: pointer;
+}
+
+.sensory-scale-ends {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Aroma Wheel Categories */
+.aroma-wheel-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.aroma-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.aroma-cat-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.aroma-cat-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  min-width: 125px;
+}
+
+.aroma-chip {
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  padding: 0.28rem 0.68rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.aroma-chip.selected {
+  background: var(--wine-primary);
+  color: #FFF;
+  border-color: var(--wine-primary);
+}
+
+.custom-aroma-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.custom-aroma-row input {
+  flex: 1;
+  padding: 0.48rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--text-main);
+  font-size: 0.85rem;
+}
+
+/* Rating Panel */
+.rating-row-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.stars-interactive {
+  display: flex;
+  gap: 0.25rem;
+  margin: 0.3rem 0;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  font-size: 1.9rem;
+  line-height: 1;
+  color: var(--border-color);
+  cursor: pointer;
+  transition: transform 0.12s ease, color 0.12s ease;
+}
+
+.star-btn.active {
+  color: var(--gold-accent);
+}
+
+.star-btn:hover {
+  transform: scale(1.15);
+}
+
+.rating-fine-tune {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.82rem;
+}
+
+.rating-fine-tune input[type="range"] {
+  width: 110px;
+  accent-color: var(--gold-accent);
+}
+
+.score-and-rebuy {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.checkbox-card {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-main);
+  cursor: pointer;
+}
+
+.checkbox-card input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--wine-primary);
+}
+
+.checkbox-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.checkbox-text strong {
+  font-size: 0.84rem;
+}
+
+.checkbox-text small {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+/* DETAIL MODAL */
+.detail-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  padding: 1.6rem;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.detail-photos-showcase {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.showcase-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.showcase-box.SinglePhoto {
+  grid-column: span 2;
+}
+
+.showcase-box img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.showcase-caption {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.detail-main-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.detail-title {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.12;
+}
+
+.detail-rating-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.detail-stars {
+  color: var(--gold-accent);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.detail-score100 {
+  background: var(--wine-primary);
+  color: #FFF;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+
+.detail-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  margin-top: 0.3rem;
+}
+
+.spec-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+}
+
+.spec-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: block;
+}
+
+.spec-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.detail-body {
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.detail-memory-banner {
+  background: var(--gold-soft);
+  border: 1px solid var(--gold-accent);
+  border-radius: 12px;
+  padding: 1.15rem 1.3rem;
+}
+
+.detail-memory-banner h4 {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+}
+
+.memory-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.8rem;
+}
+
+.detail-notes-text {
+  font-size: 0.98rem;
+  line-height: 1.65;
+  white-space: pre-line;
+  color: var(--text-main);
+}
+
+.detail-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-danger {
+  background: rgba(190, 38, 51, 0.12);
+  color: #C92A3A;
+  border: 1px solid rgba(190, 38, 51, 0.3);
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background: #C92A3A;
+  color: #FFF;
+}
+
+/* Backup Modal */
+.backup-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+}
+
+.backup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.file-label-btn {
+  text-align: center;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 0.3rem 0;
+}
+
+/* Toast */
+.toast-container {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.toast {
+  background: #1F1618;
+  color: #FAF6F0;
+  border-left: 4px solid var(--gold-accent);
+  padding: 0.8rem 1.15rem;
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+  font-size: 0.88rem;
+  font-weight: 500;
+  animation: fadeIn 0.2s ease;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Responsive & Mobile Touch Optimization */
+@media (max-width: 820px) {
+  .photo-uploaders-grid,
+  .form-grid-2,
+  .form-grid-3,
+  .sensory-sliders-grid,
+  .detail-hero,
+  .detail-photos-showcase,
+  .cellar-highlights-row {
+    grid-template-columns: 1fr;
+  }
+  .showcase-box.SinglePhoto {
+    grid-column: span 1;
+  }
+  .form-group.span-2 {
+    grid-column: span 1;
+  }
+  .span-6, .span-4 {
+    grid-column: span 12;
+  }
+  .header-inner {
+    padding: 0.7rem 0.9rem;
+    justify-content: space-between;
+    gap: 0.6rem;
+  }
+  .brand-title {
+    font-size: 1.35rem;
+  }
+  .brand-subtitle {
+    display: none;
+  }
+  .header-actions {
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .header-actions .btn-primary,
+  .header-actions .btn-secondary {
+    padding: 0.48rem 0.75rem;
+    font-size: 0.78rem;
+  }
+  .cloud-status-btn {
+    padding: 0.4rem 0.65rem;
+    font-size: 0.72rem;
+  }
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+  .main-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    border-radius: 18px 18px 0 0;
+    background: var(--bg-card);
+    padding: 0.45rem 0.45rem calc(0.45rem + env(safe-area-inset-bottom, 0px));
+    justify-content: space-around;
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.14);
+    border-top: 1px solid var(--border-color);
+  }
+  .nav-tab {
+    position: relative;
+    flex: 1;
+    flex-direction: column;
+    gap: 3px;
+    padding: 0.42rem 0.2rem;
+    font-size: 0.7rem;
+    border-radius: 12px;
+  }
+  .nav-badge {
+    position: absolute;
+    top: 2px;
+    right: 16%;
+    font-size: 0.62rem;
+    padding: 0px 5px;
+  }
+  .nav-tab.active {
+    background: var(--wine-light);
+    box-shadow: none;
+  }
+  .main-container {
+    padding: 1.1rem 1rem 6.2rem;
+  }
+  .wine-grid {
+    grid-template-columns: 1fr;
+  }
+  .modal-backdrop {
+    padding: 0;
+    align-items: flex-end;
+  }
+  .modal-container {
+    max-height: 94vh;
+    border-radius: 20px 20px 0 0;
+  }
+  .wine-form {
+    padding: 1.1rem;
+  }
+  .toast-container {
+    bottom: 78px;
+    left: 14px;
+    right: 14px;
+  }
+}
+
+
+</style>
+</head>
+<body>
+  <!-- Top Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-emblem" aria-hidden="true">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 5H25L23.8 15.2C23.4 18.8 20.9 21.6 18 21.6C15.1 21.6 12.6 18.8 12.2 15.2L11 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 13.5C14.5 14.8 16.5 12.5 19 13.5C21 14.3 22.5 13.8 23.8 13.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M18 21.6V30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M13 30H23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">VinoMemo</h1>
+          <p class="brand-subtitle">Seu Diário Simples de Vinhos, Adega &amp; Lembranças</p>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Navegação Principal">
+        <button class="nav-tab active" data-view="catalog">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 2h8l-1 9a4 4 0 0 1-6 0L8 2z"/>
+            <line x1="12" y1="14" x2="12" y2="21"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+          </svg>
+          <span>Tomados</span>
+        </button>
+        <button class="nav-tab" data-view="cellar">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z"/>
+            <path d="M9 21V12h6v9"/>
+          </svg>
+          <span>Adega Virtual</span>
+          <span class="nav-badge" id="navCellarBadge">0</span>
+        </button>
+        <button class="nav-tab" data-view="memories">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <span>Lembranças</span>
+        </button>
+        <button class="nav-tab" data-view="stats">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 20V10M12 20V4M6 20v-6"/>
+          </svg>
+          <span>Meu Paladar</span>
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <button id="btnCloudConfig" class="cloud-status-btn unconfigured" title="Configurar Banco de Dados na Nuvem">
+          <span class="cloud-dot"></span>
+          <span id="cloudStatusLabel">☁️ Conectar Nuvem</span>
+        </button>
+        <button id="btnThemeToggle" class="icon-btn" title="Alternar Modo Escuro / Claro" aria-label="Alternar tema">
+          <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <button id="btnBackupMenu" class="icon-btn" title="Exportar / Importar Backup" aria-label="Backup de dados">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+        </button>
+        <button id="btnOpenCellarFormTop" class="btn-secondary" title="Guardar vinho que tenho em casa">
+          <span>🏠 + Adega</span>
+        </button>
+        <button id="btnNewWine" class="btn-primary">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.3">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>Avaliar Tomado</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Summary Ribbon -->
+  <section class="summary-ribbon" id="summaryRibbon">
+    <div class="ribbon-inner">
+      <div class="ribbon-stat">
+        <span class="ribbon-value" id="quickTotalWines">0</span>
+        <span class="ribbon-label">Rótulos Tomados</span>
+      </div>
+      <div class="ribbon-divider"></div>
+      <div class="ribbon-stat">
+        <span class="ribbon-value" id="quickCellarCount">0</span>
+        <span class="ribbon-label">Garrafas na Adega</span>
+      </div>
+      <div class="ribbon-divider"></div>
+      <div class="ribbon-stat">
+        <span class="ribbon-value" id="quickAvgRating">0.0 ★</span>
+        <span class="ribbon-label">Média de Estrelas</span>
+      </div>
+      <div class="ribbon-divider"></div>
+      <div class="ribbon-stat">
+        <span class="ribbon-value" id="quickTopGrape">—</span>
+        <span class="ribbon-label">Uva Favorita</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+    <!-- VIEW 1: CATALOG (TASTED WINES) -->
+    <section id="viewCatalog" class="view-section active">
+      <!-- Filter & Search Bar -->
+      <div class="filter-bar">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="searchInput" placeholder="Buscar nos vinhos tomados por nome, uva, país, local ou companhia..." />
+          <button id="btnClearSearch" class="clear-search-btn hidden" title="Limpar busca">&times;</button>
+        </div>
+
+        <div class="filter-controls">
+          <div class="type-pills" id="typeFilterPills">
+            <button class="pill active" data-type="all">Todos</button>
+            <button class="pill" data-type="Tinto"><span class="dot dot-tinto"></span>Tinto</button>
+            <button class="pill" data-type="Branco"><span class="dot dot-branco"></span>Branco</button>
+            <button class="pill" data-type="Rosé"><span class="dot dot-rose"></span>Rosé</button>
+            <button class="pill" data-type="Espumante"><span class="dot dot-espumante"></span>Espumante</button>
+            <button class="pill" data-type="Sobremesa/Fortificado"><span class="dot dot-fortificado"></span>Licoroso/Doce</button>
+          </div>
+
+          <div class="select-filters">
+            <select id="filterRating" aria-label="Filtrar por estrelas">
+              <option value="0">Todas as estrelas</option>
+              <option value="4.5">4.5★ ou mais</option>
+              <option value="4">4.0★ ou mais</option>
+              <option value="3">3.0★ ou mais</option>
+            </select>
+
+            <select id="filterRebuy" aria-label="Filtrar favoritos">
+              <option value="all">Todos os rótulos</option>
+              <option value="yes">♥ Compraria novamente</option>
+              <option value="withMoment">📸 Com foto do dia</option>
+            </select>
+
+            <select id="sortOrder" aria-label="Ordenar por">
+              <option value="date_desc">Mais recentes</option>
+              <option value="date_asc">Mais antigos</option>
+              <option value="rating_desc">Maior avaliação (★)</option>
+              <option value="score_desc">Maior nota (0–10)</option>
+              <option value="name_asc">Nome (A–Z)</option>
+              <option value="vintage_desc">Ano mais recente</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wine Cards Grid -->
+      <div id="wineGrid" class="wine-grid"></div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-illustration">
+          <svg viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M20 8h24l-2 20c-.8 7.5-5.5 13-10 13s-9.2-5.5-10-13L20 8z"/>
+            <path d="M21.5 24c5 2.5 9-1.5 14 .5 3.5 1.3 6 .5 7-.5"/>
+            <path d="M32 41v15M22 56h20"/>
+          </svg>
+        </div>
+        <h2 id="emptyStateTitle">Nenhum vinho avaliado ainda</h2>
+        <p id="emptyStateDesc">Avalie um vinho que você tomou ou escolha uma garrafa da sua Adega Virtual para abrir e avaliar!</p>
+        <div class="empty-actions">
+          <button id="btnEmptyAdd" class="btn-primary">Avaliar Vinho Tomado</button>
+          <button id="btnEmptyGoCellar" class="btn-secondary">🏠 Ir para Minha Adega Virtual</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: ADEGA VIRTUAL (CELLAR) -->
+    <section id="viewCellar" class="view-section">
+      <div class="cellar-banner">
+        <div>
+          <span class="modal-eyebrow">Estoque da Sua Casa</span>
+          <h2 class="section-title">🏠 Minha Adega Virtual</h2>
+          <p class="section-subtitle">Cadastre os vinhos que você tem guardados em casa. Quando abrir uma garrafa, basta clicar em <strong>"🍷 Tomei! Avaliar"</strong> para transferir para as suas avaliações já com todos os dados preenchidos!</p>
+        </div>
+        <button id="btnAddCellarWine" class="btn-primary">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.3">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>Guardar Vinho na Adega</span>
+        </button>
+      </div>
+
+      <!-- Mini Dashboard / Resumo da Adega -->
+      <div id="cellarMiniDashboard" class="cellar-mini-dashboard"></div>
+
+      <!-- Cellar Filter Bar -->
+      <div class="filter-bar">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="cellarSearchInput" placeholder="Buscar na sua adega por nome, uva, país ou ano..." />
+        </div>
+        <div class="filter-controls">
+          <div class="type-pills" id="cellarTypePills">
+            <button class="pill active" data-type="all">Todos na Adega</button>
+            <button class="pill" data-type="Tinto"><span class="dot dot-tinto"></span>Tinto</button>
+            <button class="pill" data-type="Branco"><span class="dot dot-branco"></span>Branco</button>
+            <button class="pill" data-type="Rosé"><span class="dot dot-rose"></span>Rosé</button>
+            <button class="pill" data-type="Espumante"><span class="dot dot-espumante"></span>Espumante</button>
+            <button class="pill" data-type="Sobremesa/Fortificado"><span class="dot dot-fortificado"></span>Licoroso/Doce</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="cellarGrid" class="wine-grid"></div>
+
+      <div id="cellarEmptyState" class="empty-state hidden">
+        <div class="empty-illustration">
+          <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z"/>
+            <path d="M9 21V12h6v9"/>
+          </svg>
+        </div>
+        <h2>Sua Adega Virtual está vazia</h2>
+        <p>Adicione aqui os vinhos que você tem guardados em casa (nome, tipo, uva, país e ano). Assim você sempre sabe o que tem disponível e pode avaliá-los com 1 clique quando tomar!</p>
+        <div class="empty-actions">
+          <button id="btnCellarEmptyAdd" class="btn-primary">+ Guardar Primeiro Vinho na Adega</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: MEMORIES POLAROID WALL -->
+    <section id="viewMemories" class="view-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Mural de Lembranças &amp; Momentos</h2>
+          <p class="section-subtitle">Reveja as fotos do dia, os lugares e as pessoas especiais que compartilharam cada garrafa com você.</p>
+        </div>
+      </div>
+      <div id="memoriesGrid" class="memories-grid"></div>
+    </section>
+
+    <!-- VIEW 4: STATISTICS & PALATE PROFILE -->
+    <section id="viewStats" class="view-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Meu Gosto &amp; Resumo</h2>
+          <p class="section-subtitle">Veja de um jeito fácil quais tipos de vinho, uvas e países mais agradam o seu paladar.</p>
+        </div>
+      </div>
+      <div id="statsContent" class="stats-dashboard"></div>
+    </section>
+  </main>
+
+  <!-- MODAL: ADD / EDIT CELLAR WINE (ADEGA VIRTUAL - RÁPIDO E DIRETO) -->
+  <div id="cellarFormModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="cellarModalTitle">
+    <div class="modal-container modal-large" style="max-width: 640px;">
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow" id="cellarModalEyebrow">🏠 Minha Adega em Casa</span>
+          <h2 id="cellarModalTitle">Guardar Vinho na Adega Virtual</h2>
+        </div>
+        <button type="button" class="modal-close" id="btnCloseCellarModal" aria-label="Fechar">&times;</button>
+      </div>
+
+      <form id="cellarForm" class="wine-form">
+        <input type="hidden" id="cellarWineId" />
+
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <span class="step-badge">1</span> Dados da Garrafa
+          </h3>
+
+          <div class="form-group" style="margin-bottom: 0.9rem;">
+            <label for="cellarWineName">🍾 Nome do Vinho *</label>
+            <input type="text" id="cellarWineName" required placeholder="Cole ou digite o nome do vinho (Ex: Concha y Toro Reservado)" />
+          </div>
+
+          <div class="form-grid-2" style="margin-bottom: 0.9rem;">
+            <div class="form-group">
+              <label for="cellarWineType">🍷 Tipo do Vinho *</label>
+              <select id="cellarWineType" required>
+                <option value="Tinto">🍷 Vinho Tinto</option>
+                <option value="Branco">🥂 Vinho Branco</option>
+                <option value="Rosé">🌸 Vinho Rosé</option>
+                <option value="Espumante">🍾 Espumante / Frisante</option>
+                <option value="Sobremesa/Fortificado">🍯 Licoroso / Sobremesa</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="cellarWineGrapes">🍇 Tipo da Uva *</label>
+              <input type="text" id="cellarWineGrapes" required placeholder="Ex: Cabernet Sauvignon, Malbec, Carménère..." list="grapeSuggestions" />
+            </div>
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="cellarWineCountry">🌍 País *</label>
+              <input type="text" id="cellarWineCountry" required placeholder="Ex: Chile, Argentina, Portugal..." list="countrySuggestions" />
+            </div>
+
+            <div class="form-group">
+              <label for="cellarWineVintage">📅 Ano (Safra)</label>
+              <input type="text" id="cellarWineVintage" placeholder="Ex: 2022" maxlength="10" />
+            </div>
+
+            <div class="form-group">
+              <label for="cellarWineQty">🔢 Quantidade em Casa</label>
+              <input type="number" id="cellarWineQty" min="1" max="99" value="1" required />
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 0.9rem;">
+            <label for="cellarWineObs">📝 Observação rápida (Opcional)</label>
+            <input type="text" id="cellarWineObs" placeholder="Ex: Ganhei de presente, guardar para jantar especial, adega climatizada..." />
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <span class="step-badge">2</span> Foto do Rótulo (Opcional)
+          </h3>
+          <div class="photo-dropzone" id="dropzoneCellarLabel" style="height: 155px;">
+            <input type="file" id="inputCellarLabelPhoto" accept="image/*" class="file-input-hidden" />
+            <div id="previewCellarLabelContainer" class="photo-preview-container hidden">
+              <img id="previewCellarLabelImg" src="" alt="Prévia do Rótulo" />
+              <button type="button" id="btnRemoveCellarLabelPhoto" class="remove-photo-btn" title="Remover foto">&times;</button>
+            </div>
+            <div id="placeholderCellarLabel" class="photo-placeholder">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+              </svg>
+              <span>Toque se quiser tirar foto da garrafa agora</span>
+              <small>Se deixar sem foto, geramos um rótulo ilustrado automático</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="btnCancelCellarForm">Cancelar</button>
+          <button type="submit" class="btn-primary">🏠 Guardar na Minha Adega</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT TASTED WINE (AVALIAÇÃO E MEMÓRIA) -->
+  <div id="wineFormModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="formModalTitle">
+    <div class="modal-container modal-large">
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow" id="formModalEyebrow">Simples &amp; Didático</span>
+          <h2 id="formModalTitle">Salvar Rótulo &amp; Lembrança</h2>
+        </div>
+        <button type="button" class="modal-close" id="btnCloseFormModal" aria-label="Fechar">&times;</button>
+      </div>
+
+      <form id="wineForm" class="wine-form">
+        <input type="hidden" id="wineId" />
+        <input type="hidden" id="fromCellarWineId" />
+
+        <!-- Banner quando vem da Adega Virtual -->
+        <div id="fromCellarBanner" class="from-cellar-alert hidden">
+          <span>🍷 <strong>Abrindo garrafa da sua Adega Virtual!</strong> Os dados do vinho já foram preenchidos automaticamente. Agora é só colocar a foto do momento e a sua avaliação!</span>
+        </div>
+
+        <!-- SECTION 1: PHOTOS (Label + Memory of the Day) -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <span class="step-badge">1</span> Fotos para Recordação
+          </h3>
+          <div class="photo-uploaders-grid">
+            <!-- Label Photo -->
+            <div class="photo-upload-card">
+              <div class="photo-card-header">
+                <strong>🍾 Foto do Rótulo</strong>
+                <span>Para você lembrar qual foi a garrafa</span>
+              </div>
+              <div class="photo-dropzone" id="dropzoneLabel">
+                <input type="file" id="inputLabelPhoto" accept="image/*" class="file-input-hidden" />
+                <div id="previewLabelContainer" class="photo-preview-container hidden">
+                  <img id="previewLabelImg" src="" alt="Prévia do Rótulo" />
+                  <button type="button" id="btnRemoveLabelPhoto" class="remove-photo-btn" title="Remover foto">&times;</button>
+                </div>
+                <div id="placeholderLabel" class="photo-placeholder">
+                  <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                  </svg>
+                  <span>Toque para enviar ou tirar foto do <strong>Rótulo</strong></span>
+                  <small>Opcional (se não tiver, criamos uma capa bonita)</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Memory Photo -->
+            <div class="photo-upload-card memory-highlight">
+              <div class="photo-card-header">
+                <strong>📸 Foto do Dia (Lembrança)</strong>
+                <span>Quem estava junto, o prato ou o lugar</span>
+              </div>
+              <div class="photo-dropzone" id="dropzoneMemory">
+                <input type="file" id="inputMemoryPhoto" accept="image/*" class="file-input-hidden" />
+                <div id="previewMemoryContainer" class="photo-preview-container hidden">
+                  <img id="previewMemoryImg" src="" alt="Prévia da Lembrança" />
+                  <button type="button" id="btnRemoveMemoryPhoto" class="remove-photo-btn" title="Remover foto">&times;</button>
+                </div>
+                <div id="placeholderMemory" class="photo-placeholder">
+                  <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <path d="M21 15l-5-5L5 21"/>
+                  </svg>
+                  <span>Toque para guardar a <strong>Foto do Momento</strong></span>
+                  <small>Vai aparecer também no seu Mural de Lembranças</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: INFORMAÇÕES BÁSICAS DO VINHO -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <span class="step-badge">2</span> Informações Básicas do Vinho
+          </h3>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="wineName">Nome do Vinho (como está no rótulo) *</label>
+              <input type="text" id="wineName" required placeholder="Ex: Casillero del Diablo, Pêra-Manca..." />
+            </div>
+
+            <div class="form-group">
+              <label for="wineType">Tipo do Vinho *</label>
+              <select id="wineType" required>
+                <option value="Tinto">🍷 Vinho Tinto</option>
+                <option value="Branco">🥂 Vinho Branco</option>
+                <option value="Rosé">🌸 Vinho Rosé</option>
+                <option value="Espumante">🍾 Espumante / Frisante</option>
+                <option value="Sobremesa/Fortificado">🍯 Licoroso / Sobremesa (Porto, etc.)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-3" style="margin-top: 0.9rem;">
+            <div class="form-group">
+              <label for="wineGrapes">🍇 Tipo de Uva</label>
+              <input type="text" id="wineGrapes" placeholder="Ex: Malbec, Carménère, Merlot..." list="grapeSuggestions" />
+              <small class="field-hint">A uva principal escrita na garrafa</small>
+              <datalist id="grapeSuggestions">
+                <option value="Malbec"></option>
+                <option value="Cabernet Sauvignon"></option>
+                <option value="Merlot"></option>
+                <option value="Pinot Noir"></option>
+                <option value="Syrah"></option>
+                <option value="Carménère"></option>
+                <option value="Tempranillo"></option>
+                <option value="Tannat"></option>
+                <option value="Chardonnay"></option>
+                <option value="Sauvignon Blanc"></option>
+                <option value="Blend / Corte (Várias uvas)"></option>
+              </datalist>
+            </div>
+
+            <div class="form-group">
+              <label for="wineCountry">🌍 País</label>
+              <input type="text" id="wineCountry" placeholder="Ex: Chile, Argentina, Portugal..." list="countrySuggestions" />
+              <small class="field-hint">De onde veio o vinho</small>
+              <datalist id="countrySuggestions">
+                <option value="Chile"></option>
+                <option value="Argentina"></option>
+                <option value="Portugal"></option>
+                <option value="Brasil"></option>
+                <option value="Itália"></option>
+                <option value="França"></option>
+                <option value="Espanha"></option>
+                <option value="Uruguai"></option>
+              </datalist>
+            </div>
+
+            <div class="form-group">
+              <label for="wineVintage">📅 Ano (Safra)</label>
+              <input type="text" id="wineVintage" placeholder="Ex: 2022" maxlength="10" />
+              <small class="field-hint">Ano de colheita impresso no rótulo</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: COMO ELE É NA BOCA? (DIDÁTICO) -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <span class="step-badge">3</span> Como você sentiu o vinho? (Guia Didático)
+          </h3>
+          <p class="section-helper-text">Arraste as barrinhas conforme o que você sentiu ao beber. Não existe resposta certa ou errada, é a sua percepção!</p>
+
+          <div class="sensory-sliders-grid">
+            <div class="sensory-slider-item">
+              <div class="sensory-slider-header">
+                <label for="sensoryBody">💧 Peso na Boca (Corpo)</label>
+                <span class="sensory-val-label" id="labelBody">Médio (3/5)</span>
+              </div>
+              <p class="didactic-tip">O vinho parece levinho como água ou mais denso e encorpado na boca?</p>
+              <input type="range" id="sensoryBody" min="1" max="5" step="1" value="3" />
+              <div class="sensory-scale-ends">
+                <span>1 • Bem Leve</span>
+                <span>5 • Bem Encorpado</span>
+              </div>
+            </div>
+
+            <div class="sensory-slider-item">
+              <div class="sensory-slider-header">
+                <label for="sensoryTannin">👅 Sensação de "Amarrar" (Tanino)</label>
+                <span class="sensory-val-label" id="labelTannin">Equilibrado (3/5)</span>
+              </div>
+              <p class="didactic-tip">Sabe quando a língua e a gengiva ficam secas (como comer banana verde)? Isso é o tanino!</p>
+              <input type="range" id="sensoryTannin" min="1" max="5" step="1" value="3" />
+              <div class="sensory-scale-ends">
+                <span>1 • Macio (Não amarra)</span>
+                <span>5 • Amarra bastante</span>
+              </div>
+            </div>
+
+            <div class="sensory-slider-item">
+              <div class="sensory-slider-header">
+                <label for="sensoryAcidity">🍋 Refrescância (Acidez)</label>
+                <span class="sensory-val-label" id="labelAcidity">Fresca (3/5)</span>
+              </div>
+              <p class="didactic-tip">Faz a boca salivar nas laterais da língua, dando sensação refrescante?</p>
+              <input type="range" id="sensoryAcidity" min="1" max="5" step="1" value="3" />
+              <div class="sensory-scale-ends">
+                <span>1 • Suave</span>
+                <span>5 • Muito Refrescante</span>
+              </div>
+            </div>
+
+            <div class="sensory-slider-item">
+              <div class="sensory-slider-header">
+                <label for="sensorySweetness">🍯 Doçura</label>
+                <span class="sensory-val-label" id="labelSweetness">Seco (1/5)</span>
+              </div>
+              <p class="didactic-tip">Você sentiu gosto doce na ponta da língua ou ele é totalmente seco (sem açúcar)?</p>
+              <input type="range" id="sensorySweetness" min="1" max="5" step="1" value="1" />
+              <div class="sensory-scale-ends">
+                <span>1 • Seco (Zero doce)</span>
+                <span>5 • Bem Doce / Suave</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 4: SUA NOTA, OPINIÃO E MEMÓRIA DO DIA -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <span class="step-badge">4</span> Sua Nota, Opinião &amp; Lembrança do Dia
+          </h3>
+
+          <div class="rating-row-panel">
+            <div class="star-rating-picker">
+              <label>Avaliação em Estrelas</label>
+              <div class="stars-interactive" id="starPicker">
+                <button type="button" data-star="1" class="star-btn">★</button>
+                <button type="button" data-star="2" class="star-btn">★</button>
+                <button type="button" data-star="3" class="star-btn">★</button>
+                <button type="button" data-star="4" class="star-btn">★</button>
+                <button type="button" data-star="5" class="star-btn">★</button>
+              </div>
+              <div class="rating-fine-tune">
+                <span>Estrelas: <strong id="ratingNumberDisplay">4.5</strong> ★</span>
+                <input type="range" id="wineRating" min="1" max="5" step="0.5" value="4.5" />
+              </div>
+            </div>
+
+            <div class="score-and-rebuy">
+              <div class="form-group">
+                <label for="wineScore10">Sua Nota Pessoal (0 a 10)</label>
+                <input type="number" id="wineScore10" min="0" max="10" step="0.5" placeholder="Ex: 9.0" />
+              </div>
+              <label class="checkbox-card" for="wineRebuy">
+                <input type="checkbox" id="wineRebuy" checked />
+                <span class="checkbox-text">
+                  <strong>♥ Compraria novamente</strong>
+                  <small>Vale a pena repetir esse rótulo</small>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="tastingDate">📅 Data do Momento</label>
+              <input type="date" id="tastingDate" />
+            </div>
+
+            <div class="form-group">
+              <label for="tastingLocation">📍 Onde você tomou?</label>
+              <input type="text" id="tastingLocation" placeholder="Ex: Em casa, Restaurante, Viagem..." />
+            </div>
+
+            <div class="form-group">
+              <label for="tastingCompanions">👥 Com quem estava?</label>
+              <input type="text" id="tastingCompanions" placeholder="Ex: Amor, Família, Amigos..." />
+            </div>
+
+            <div class="form-group span-2">
+              <label for="tastingPairing">🍽️ O que comeu junto? (Opcional)</label>
+              <input type="text" id="tastingPairing" placeholder="Ex: Pizza, churrasco, massa, queijos..." />
+            </div>
+
+            <div class="form-group">
+              <label for="tastingOccasion">🎉 Qual foi a ocasião?</label>
+              <input type="text" id="tastingOccasion" placeholder="Ex: Jantar de sexta, Aniversário..." />
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 1rem;">
+            <label for="wineNotes">💬 Sua Opinião e Lembrança do Dia *</label>
+            <textarea id="wineNotes" rows="4" required placeholder="Conte com suas palavras: gostou do vinho? Achou fácil de beber? Como foi esse dia especial?"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="btnCancelForm">Cancelar</button>
+          <button type="submit" class="btn-primary">Salvar Avaliação no Diário</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: WINE DETAIL & MEMORY VIEW -->
+  <div id="wineDetailModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-container modal-detail">
+      <div id="wineDetailContent"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: CLOUD DATABASE SYNC -->
+  <div id="cloudModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-container modal-large" style="max-width: 660px;">
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">Sincronização Automática Celular &amp; PC</span>
+          <h2>⚡ Banco na Nuvem com Supabase</h2>
+        </div>
+        <button type="button" class="modal-close" id="btnCloseCloudModal">&times;</button>
+      </div>
+      <form id="cloudConfigForm" class="wine-form" style="gap: 1.15rem;">
+        <div class="cloud-guide-box">
+          <strong>Como conectar seu Supabase Gratuito (2 minutos):</strong>
+          <p>Com o Supabase conectado, tanto os vinhos avaliados quanto os vinhos da sua <strong>Adega Virtual</strong> ficam salvos na nuvem e sincronizam entre seu celular e computador.</p>
+          <details class="cloud-steps-details">
+            <summary>📖 Passo a passo no Supabase (Gratuito)</summary>
+            <ol>
+              <li>Crie um projeto gratuito em <a href="https://supabase.com/dashboard" target="_blank" rel="noopener">supabase.com/dashboard</a>.</li>
+              <li>No menu lateral esquerdo do Supabase, clique em <strong>SQL Editor</strong> → <strong>New Query</strong>.</li>
+              <li>
+                Clique no botão abaixo para copiar o script da tabela, cole lá no SQL Editor e clique em <strong>Run</strong>:
+                <div style="margin-top: 6px;">
+                  <button type="button" id="btnCopySupabaseSql" class="btn-secondary btn-sm">📋 Copiar Comando SQL da Tabela</button>
+                </div>
+              </li>
+              <li>Depois, vá em <strong>Project Settings (⚙️) → API</strong> e copie a <strong>Project URL</strong> e a chave pública <strong>Publishable / anon</strong>.</li>
+            </ol>
+          </details>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="cloudProvider">Provedor de Nuvem</label>
+            <select id="cloudProvider">
+              <option value="supabase">⚡ Supabase (PostgreSQL Nuvem)</option>
+              <option value="firebase">🔥 Google Firebase (Realtime DB)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="cloudCellarId">🔑 Código da Sua Adega Pessoal *</label>
+            <input type="text" id="cloudCellarId" required placeholder="Ex: adega-guilherme" />
+            <small class="field-hint">Use o mesmo código no celular e no PC</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cloudUrl">🌐 Project URL do Supabase *</label>
+          <input type="url" id="cloudUrl" required value="https://jsaspzuoqmwxbsjisiuy.supabase.co" placeholder="https://jsaspzuoqmwxbsjisiuy.supabase.co" />
+          <small class="field-hint" id="cloudUrlHint">URL do seu projeto já configurada!</small>
+        </div>
+
+        <div class="form-group" id="cloudApiKeyGroup">
+          <label for="cloudApiKey">🔒 API Key (Publishable / anon) do Supabase *</label>
+          <input type="password" id="cloudApiKey" value="sb_publishable_2_aQVNgyD2b7D2bBwFqgJg_RgKhiDq1" placeholder="Cole aqui sua chave anon public (eyJhbGci... ou sb_publishable_...)" />
+          <small class="field-hint">Chave do seu projeto já configurada!</small>
+        </div>
+
+        <div class="modal-footer" style="justify-content: space-between; flex-wrap: wrap;">
+          <button type="button" class="btn-danger" id="btnDisconnectCloud">Desconectar Nuvem</button>
+          <div style="display:flex; gap: 0.6rem;">
+            <button type="button" class="btn-secondary" id="btnSyncNow">🔄 Sincronizar Agora</button>
+            <button type="submit" class="btn-primary">⚡ Salvar &amp; Conectar Supabase</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: BACKUP & EXPORT/IMPORT -->
+  <div id="backupModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-container modal-small">
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">Segurança dos seus dados</span>
+          <h2>Backup &amp; Restauração</h2>
+        </div>
+        <button type="button" class="modal-close" id="btnCloseBackupModal">&times;</button>
+      </div>
+      <div class="backup-body">
+        <p>Você pode exportar um arquivo completo de backup (incluindo vinhos tomados e vinhos guardados na Adega Virtual) ou restaurar quando quiser.</p>
+        <div class="backup-actions">
+          <button type="button" id="btnExportJson" class="btn-primary full-width">
+            ⬇ Exportar Diário + Adega (.json com fotos)
+          </button>
+          <label class="btn-secondary full-width file-label-btn">
+            ⬆ Importar Arquivo de Backup (.json)
+            <input type="file" id="inputImportJson" accept=".json,application/json" class="file-input-hidden" />
+          </label>
+          <hr class="divider" />
+          <button type="button" id="btnLoadSamplesFromBackup" class="btn-ghost full-width">
+            ✨ Restaurar Exemplos Demonstrativos
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <script>
+/**
+ * VinoMemo — Camada de Persistência Híbrida: Nuvem (Firebase / Supabase) + Local (IndexedDB / LocalStorage)
+ */
+
+const DB_NAME = 'VinoMemoDB';
+const DB_VERSION = 1;
+const STORE_NAME = 'wines';
+const CLOUD_CONFIG_KEY = 'vinomemo_cloud_config_v1';
+
+const DEFAULT_SUPABASE_URL = 'https://jsaspzuoqmwxbsjisiuy.supabase.co';
+const DEFAULT_SUPABASE_KEY = 'sb_publishable_2_aQVNgyD2b7D2bBwFqgJg_RgKhiDq1';
+
+class CloudSyncManager {
+  constructor() {
+    this.config = this.loadConfig();
+    this.onStatusChange = null;
+    this.status = this.isConfigured() ? 'connected' : 'unconfigured';
+  }
+
+  loadConfig() {
+    try {
+      const raw = localStorage.getItem(CLOUD_CONFIG_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (!parsed.url) parsed.url = DEFAULT_SUPABASE_URL;
+        if (!parsed.apiKey) parsed.apiKey = DEFAULT_SUPABASE_KEY;
+        parsed.url = parsed.url.replace(/\/rest\/v1\/?$/i, '').replace(/\/+$/, '');
+        return parsed;
+      }
+      return {
+        provider: 'supabase',
+        url: DEFAULT_SUPABASE_URL,
+        apiKey: DEFAULT_SUPABASE_KEY,
+        cellarId: 'minha-adega-principal'
+      };
+    } catch (e) {
+      return {
+        provider: 'supabase',
+        url: DEFAULT_SUPABASE_URL,
+        apiKey: DEFAULT_SUPABASE_KEY,
+        cellarId: 'minha-adega-principal'
+      };
+    }
+  }
+
+  saveConfig(newConfig) {
+    this.config = {
+      provider: (newConfig.provider || 'supabase').trim(),
+      url: (newConfig.url || DEFAULT_SUPABASE_URL)
+        .trim()
+        .replace(/\/rest\/v1\/?$/i, '')
+        .replace(/\/+$/, ''),
+      apiKey: (newConfig.apiKey || DEFAULT_SUPABASE_KEY).trim(),
+      cellarId: (newConfig.cellarId || 'minha-adega-principal')
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9_-]/g, '-')
+    };
+    localStorage.setItem(CLOUD_CONFIG_KEY, JSON.stringify(this.config));
+    this.setStatus(this.isConfigured() ? 'connected' : 'unconfigured');
+  }
+
+  _getSupabaseHeaders(extra = {}) {
+    const headers = {
+      apikey: this.config.apiKey,
+      ...extra
+    };
+    if (this.config.apiKey && this.config.apiKey.startsWith('eyJ')) {
+      headers.Authorization = `Bearer ${this.config.apiKey}`;
+    }
+    return headers;
+  }
+
+  isConfigured() {
+    if (!this.config || !this.config.url) return false;
+    if (this.config.provider === 'supabase' && !this.config.apiKey) return false;
+    return true;
+  }
+
+  setStatus(status, message = '') {
+    this.status = status;
+    if (typeof this.onStatusChange === 'function') {
+      this.onStatusChange(status, message);
+    }
+  }
+
+  /**
+   * Busca todos os vinhos na nuvem
+   */
+  async fetchAllFromCloud() {
+    if (!this.isConfigured()) return null;
+    this.setStatus('syncing', 'Sincronizando com a nuvem...');
+
+    try {
+      if (this.config.provider === 'firebase') {
+        const endpoint = `${this.config.url}/cellars/${encodeURIComponent(this.config.cellarId)}/wines.json${
+          this.config.apiKey ? `?auth=${encodeURIComponent(this.config.apiKey)}` : ''
+        }`;
+        const res = await fetch(endpoint, { method: 'GET' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        this.setStatus('connected', 'Sincronizado na nuvem');
+        if (!data) return [];
+        return Object.values(data).filter((item) => item && item.id && !item._deleted);
+      }
+
+      if (this.config.provider === 'supabase') {
+        const endpoint = `${this.config.url}/rest/v1/wines?cellar_id=eq.${encodeURIComponent(
+          this.config.cellarId
+        )}&select=id,payload,updated_at`;
+        const res = await fetch(endpoint, {
+          method: 'GET',
+          headers: this._getSupabaseHeaders()
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const rows = await res.json();
+        this.setStatus('connected', 'Sincronizado na nuvem');
+        return (rows || []).map((r) => r.payload).filter(Boolean);
+      }
+    } catch (err) {
+      console.error('Erro ao buscar da nuvem:', err);
+      this.setStatus('error', 'Falta criar a tabela wines no SQL Editor do Supabase ou sem conexão');
+      return null;
+    }
+    return null;
+  }
+
+  /**
+   * Salva ou atualiza 1 vinho na nuvem
+   */
+  async pushWineToCloud(wine) {
+    if (!this.isConfigured()) return false;
+    this.setStatus('syncing', 'Salvando na nuvem...');
+
+    try {
+      if (this.config.provider === 'firebase') {
+        const endpoint = `${this.config.url}/cellars/${encodeURIComponent(
+          this.config.cellarId
+        )}/wines/${encodeURIComponent(wine.id)}.json${
+          this.config.apiKey ? `?auth=${encodeURIComponent(this.config.apiKey)}` : ''
+        }`;
+        const res = await fetch(endpoint, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(wine)
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        this.setStatus('connected', 'Salvo na nuvem');
+        return true;
+      }
+
+      if (this.config.provider === 'supabase') {
+        const endpoint = `${this.config.url}/rest/v1/wines?on_conflict=id`;
+        const fullRow = {
+          id: `${this.config.cellarId}__${wine.id}`,
+          cellar_id: this.config.cellarId,
+          name: wine.name || 'Vinho',
+          type: wine.type || null,
+          grapes: wine.grapes || null,
+          country: wine.country || null,
+          vintage: wine.vintage || null,
+          rating: wine.rating !== undefined ? Number(wine.rating) : null,
+          score10: wine.score10 !== undefined && wine.score10 !== null ? Number(wine.score10) : null,
+          tasting_date: wine.tastingDate || null,
+          payload: wine,
+          updated_at: wine.updatedAt || new Date().toISOString()
+        };
+        let res = await fetch(endpoint, {
+          method: 'POST',
+          headers: this._getSupabaseHeaders({
+            'Content-Type': 'application/json',
+            Prefer: 'resolution=merge-duplicates'
+          }),
+          body: JSON.stringify(fullRow)
+        });
+        if (!res.ok) {
+          // Fallback caso a tabela tenha apenas as colunas mínimas
+          res = await fetch(endpoint, {
+            method: 'POST',
+            headers: this._getSupabaseHeaders({
+              'Content-Type': 'application/json',
+              Prefer: 'resolution=merge-duplicates'
+            }),
+            body: JSON.stringify({
+              id: `${this.config.cellarId}__${wine.id}`,
+              cellar_id: this.config.cellarId,
+              payload: wine,
+              updated_at: wine.updatedAt || new Date().toISOString()
+            })
+          });
+        }
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        this.setStatus('connected', 'Salvo no Supabase');
+        return true;
+      }
+    } catch (err) {
+      console.error('Erro ao salvar na nuvem:', err);
+      this.setStatus('error', 'Salvo no aparelho (pendente envio p/ nuvem)');
+      return false;
+    }
+    return false;
+  }
+
+  /**
+   * Remove 1 vinho da nuvem
+   */
+  async deleteWineFromCloud(wineId) {
+    if (!this.isConfigured()) return false;
+    this.setStatus('syncing', 'Removendo da nuvem...');
+
+    try {
+      if (this.config.provider === 'firebase') {
+        const endpoint = `${this.config.url}/cellars/${encodeURIComponent(
+          this.config.cellarId
+        )}/wines/${encodeURIComponent(wineId)}.json${
+          this.config.apiKey ? `?auth=${encodeURIComponent(this.config.apiKey)}` : ''
+        }`;
+        const res = await fetch(endpoint, { method: 'DELETE' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        this.setStatus('connected', 'Sincronizado na nuvem');
+        return true;
+      }
+
+      if (this.config.provider === 'supabase') {
+        const compositeId = `${this.config.cellarId}__${wineId}`;
+        const endpoint = `${this.config.url}/rest/v1/wines?id=eq.${encodeURIComponent(compositeId)}`;
+        const res = await fetch(endpoint, {
+          method: 'DELETE',
+          headers: this._getSupabaseHeaders()
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        this.setStatus('connected', 'Sincronizado na nuvem');
+        return true;
+      }
+    } catch (err) {
+      console.error('Erro ao excluir da nuvem:', err);
+      this.setStatus('error', 'Erro ao sincronizar exclusão');
+      return false;
+    }
+    return false;
+  }
+
+  /**
+   * Envia todos os vinhos locais para a nuvem
+   */
+  async pushAllToCloud(winesArray) {
+    if (!this.isConfigured()) return false;
+    this.setStatus('syncing', 'Enviando todos os rótulos para a nuvem...');
+
+    try {
+      if (this.config.provider === 'firebase') {
+        const mapObj = {};
+        winesArray.forEach((w) => {
+          if (w && w.id) mapObj[w.id] = w;
+        });
+        const endpoint = `${this.config.url}/cellars/${encodeURIComponent(this.config.cellarId)}/wines.json${
+          this.config.apiKey ? `?auth=${encodeURIComponent(this.config.apiKey)}` : ''
+        }`;
+        const res = await fetch(endpoint, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(mapObj)
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        this.setStatus('connected', 'Todos os vinhos salvos na nuvem');
+        return true;
+      }
+
+      if (this.config.provider === 'supabase') {
+        for (const w of winesArray) {
+          await this.pushWineToCloud(w);
+        }
+        this.setStatus('connected', 'Todos os vinhos salvos na nuvem');
+        return true;
+      }
+    } catch (err) {
+      console.error('Erro ao enviar lote para a nuvem:', err);
+      this.setStatus('error', 'Falha ao conectar com a nuvem');
+      return false;
+    }
+    return false;
+  }
+}
+
+class WineDatabase {
+  constructor() {
+    this.db = null;
+    this.useFallback = false;
+    this.fallbackKey = 'vinomemo_wines_storage_v1';
+    this.cloud = new CloudSyncManager();
+  }
+
+  async init() {
+    if (this.db || this.useFallback) return;
+
+    if (typeof indexedDB === 'undefined') {
+      this.useFallback = true;
+      return;
+    }
+
+    return new Promise((resolve) => {
+      try {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+            store.createIndex('tastingDate', 'tastingDate', { unique: false });
+            store.createIndex('type', 'type', { unique: false });
+            store.createIndex('rating', 'rating', { unique: false });
+          }
+        };
+
+        request.onsuccess = (event) => {
+          this.db = event.target.result;
+          resolve(this.db);
+        };
+
+        request.onerror = () => {
+          this.useFallback = true;
+          resolve(null);
+        };
+      } catch (e) {
+        this.useFallback = true;
+        resolve(null);
+      }
+    });
+  }
+
+  _getFallbackList() {
+    try {
+      const raw = localStorage.getItem(this.fallbackKey);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  _saveFallbackList(list) {
+    try {
+      localStorage.setItem(this.fallbackKey, JSON.stringify(list));
+    } catch (e) {
+      console.error('Erro ao salvar no armazenamento local:', e);
+    }
+  }
+
+  async getAllLocalWines() {
+    await this.init();
+    if (this.useFallback) {
+      return this._getFallbackList();
+    }
+    return new Promise((resolve) => {
+      try {
+        const tx = this.db.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => resolve(this._getFallbackList());
+      } catch (e) {
+        this.useFallback = true;
+        resolve(this._getFallbackList());
+      }
+    });
+  }
+
+  async getAllWines() {
+    const localWines = await this.getAllLocalWines();
+    if (!this.cloud.isConfigured()) {
+      return localWines;
+    }
+
+    // Se a nuvem estiver configurada, faz merge bidirecional inteligente (Nuvem <-> Local)
+    const cloudWines = await this.cloud.fetchAllFromCloud();
+    if (!cloudWines) {
+      return localWines;
+    }
+
+    const mergedMap = new Map();
+    localWines.forEach((w) => mergedMap.set(w.id, w));
+
+    const toSaveLocally = [];
+    cloudWines.forEach((cw) => {
+      const existing = mergedMap.get(cw.id);
+      if (!existing || (cw.updatedAt || '') >= (existing.updatedAt || '')) {
+        mergedMap.set(cw.id, cw);
+        toSaveLocally.push(cw);
+      }
+    });
+
+    if (toSaveLocally.length > 0) {
+      await this.importManyLocalOnly(toSaveLocally);
+    }
+
+    // Se havia vinhos locais que ainda não estavam na nuvem, envia-os
+    const cloudIds = new Set(cloudWines.map((c) => c.id));
+    const localOnlyWines = localWines.filter((lw) => !cloudIds.has(lw.id) && !String(lw.id).startsWith('sample_'));
+    if (localOnlyWines.length > 0) {
+      await this.cloud.pushAllToCloud(localOnlyWines);
+    }
+
+    return Array.from(mergedMap.values());
+  }
+
+  async saveWine(wine) {
+    await this.init();
+    const now = new Date().toISOString();
+    const record = {
+      ...wine,
+      id: wine.id || 'wine_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
+      updatedAt: now,
+      createdAt: wine.createdAt || now
+    };
+
+    if (this.useFallback) {
+      const list = this._getFallbackList();
+      const idx = list.findIndex((w) => w.id === record.id);
+      if (idx >= 0) list[idx] = record;
+      else list.push(record);
+      this._saveFallbackList(list);
+    } else {
+      await new Promise((resolve, reject) => {
+        const tx = this.db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.put(record);
+        req.onsuccess = () => resolve(record);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    // Sincroniza imediatamente com a Nuvem se configurada
+    if (this.cloud.isConfigured()) {
+      await this.cloud.pushWineToCloud(record);
+    }
+
+    return record;
+  }
+
+  async deleteWine(id) {
+    await this.init();
+    if (this.useFallback) {
+      const list = this._getFallbackList().filter((w) => w.id !== id);
+      this._saveFallbackList(list);
+    } else {
+      await new Promise((resolve, reject) => {
+        const tx = this.db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.delete(id);
+        req.onsuccess = () => resolve(true);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    if (this.cloud.isConfigured()) {
+      await this.cloud.deleteWineFromCloud(id);
+    }
+    return true;
+  }
+
+  async importManyLocalOnly(winesArray) {
+    await this.init();
+    if (this.useFallback) {
+      const list = this._getFallbackList();
+      winesArray.forEach((w) => {
+        if (w && w.name) {
+          const id = w.id || 'wine_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+          const idx = list.findIndex((item) => item.id === id);
+          const rec = { ...w, id };
+          if (idx >= 0) list[idx] = rec;
+          else list.push(rec);
+        }
+      });
+      this._saveFallbackList(list);
+      return winesArray.length;
+    }
+
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      winesArray.forEach((w) => {
+        if (w && w.name) {
+          store.put({
+            ...w,
+            id: w.id || 'wine_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7)
+          });
+        }
+      });
+      tx.oncomplete = () => resolve(winesArray.length);
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  async importMany(winesArray) {
+    const count = await this.importManyLocalOnly(winesArray);
+    if (this.cloud.isConfigured()) {
+      await this.cloud.pushAllToCloud(winesArray);
+    }
+    return count;
+  }
+}
+
+/**
+ * Comprime uma imagem de arquivo (File) para DataURL JPEG otimizado (ideal para sincronizar rápido na nuvem)
+ */
+function compressImageFile(file, maxDimension = 1000, quality = 0.8) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        resolve(dataUrl);
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+/**
+ * Gera uma ilustração elegante de rótulo de vinho em SVG DataURL
+ */
+function generateWineLabelIllustration({ name, grapes, vintage, type, country }) {
+  const paletteByType = {
+    'Tinto': { bg1: '#2D0C16', bg2: '#5B1829', labelBg: '#FAF4E8', accent: '#8E243D', gold: '#C59B48' },
+    'Branco': { bg1: '#1F2C24', bg2: '#334B3C', labelBg: '#FDFBF4', accent: '#7D6A2E', gold: '#D4AF37' },
+    'Rosé': { bg1: '#4A1F28', bg2: '#89404F', labelBg: '#FFF8F8', accent: '#C85D71', gold: '#D6A15C' },
+    'Espumante': { bg1: '#1D1B18', bg2: '#3B3529', labelBg: '#FCF8EE', accent: '#997A2C', gold: '#E2BE64' },
+    'Sobremesa/Fortificado': { bg1: '#2B160E', bg2: '#5E2E1C', labelBg: '#F9F2E4', accent: '#8F3F1D', gold: '#C8963E' }
+  };
+  const pal = paletteByType[type] || paletteByType['Tinto'];
+  const safeName = (name || 'Vinho Especial').slice(0, 28);
+  const safeCountry = (country || type || 'Vinho').slice(0, 26).toUpperCase();
+  const safeGrapes = (grapes || type || '').slice(0, 28);
+  const safeVintage = vintage || 'Safra Especial';
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" width="600" height="420">
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="${pal.bg1}"/>
+        <stop offset="100%" stop-color="${pal.bg2}"/>
+      </linearGradient>
+    </defs>
+    <rect width="600" height="420" fill="url(#bg)"/>
+    <circle cx="510" cy="80" r="140" fill="${pal.gold}" opacity="0.08"/>
+    <circle cx="80" cy="360" r="160" fill="${pal.gold}" opacity="0.06"/>
+    <rect x="115" y="42" width="370" height="336" rx="10" fill="${pal.labelBg}" stroke="${pal.gold}" stroke-width="3"/>
+    <rect x="127" y="54" width="346" height="312" rx="6" fill="none" stroke="${pal.gold}" stroke-width="1" opacity="0.7"/>
+    <circle cx="300" cy="105" r="24" fill="none" stroke="${pal.gold}" stroke-width="1.5"/>
+    <path d="M291 95h18l-1.5 11c-.5 4-3.5 7-7.5 7s-7-3-7.5-7L291 95z" fill="${pal.accent}"/>
+    <line x1="300" y1="113" x2="300" y2="122" stroke="${pal.accent}" stroke-width="2"/>
+    <line x1="294" y1="122" x2="306" y2="122" stroke="${pal.accent}" stroke-width="2"/>
+    <text x="300" y="158" text-anchor="middle" font-family="Georgia, serif" font-size="11" letter-spacing="3" fill="#6E5A4F" font-weight="bold">${safeCountry}</text>
+    <line x1="210" y1="172" x2="390" y2="172" stroke="${pal.gold}" stroke-width="1"/>
+    <text x="300" y="214" text-anchor="middle" font-family="Georgia, serif" font-size="25" font-weight="bold" fill="#1F1618">${safeName}</text>
+    <text x="300" y="246" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="16" fill="${pal.accent}">${safeGrapes}</text>
+    <rect x="245" y="274" width="110" height="30" rx="15" fill="${pal.accent}"/>
+    <text x="300" y="294" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#FFFFFF">${safeVintage}</text>
+    <text x="300" y="340" text-anchor="middle" font-family="sans-serif" font-size="10" letter-spacing="2" fill="#8C7A6B">DIÁRIO DE MEMÓRIAS • VINOMEMO</text>
+  </svg>`;
+
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+/**
+ * Gera uma ilustração aconchegante para a Foto de Lembrança nos 3 exemplos iniciais
+ */
+function generateMemorySceneIllustration({ title, subtitle, mood }) {
+  const palettes = {
+    sunset: { sky1: '#2C1628', sky2: '#8C3B4A', glow: '#F3B664', fg: '#1A0F14' },
+    dinner: { sky1: '#1A1823', sky2: '#3D2A35', glow: '#E8A855', fg: '#120D10' },
+    celebration: { sky1: '#192730', sky2: '#38575C', glow: '#F2D078', fg: '#10191E' }
+  };
+  const p = palettes[mood] || palettes.sunset;
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" width="600" height="420">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${p.sky1}"/>
+        <stop offset="100%" stop-color="${p.sky2}"/>
+      </linearGradient>
+    </defs>
+    <rect width="600" height="420" fill="url(#sky)"/>
+    <circle cx="130" cy="110" r="42" fill="${p.glow}" opacity="0.22"/>
+    <circle cx="460" cy="95" r="55" fill="${p.glow}" opacity="0.18"/>
+    <circle cx="310" cy="75" r="28" fill="#FFF" opacity="0.15"/>
+    <circle cx="210" cy="150" r="16" fill="${p.glow}" opacity="0.35"/>
+    <circle cx="400" cy="160" r="20" fill="${p.glow}" opacity="0.3"/>
+    <rect x="0" y="320" width="600" height="100" fill="${p.fg}"/>
+    <g transform="translate(235, 165) rotate(8)">
+      <path d="M10 0 H46 L42 36 C40 50 34 58 28 58 C22 58 16 50 14 36 Z" fill="none" stroke="#FFF" stroke-width="2.5"/>
+      <path d="M13 24 H43 L42 36 C40 49 34 56 28 56 C22 56 16 49 14 36 Z" fill="#8B1E34" opacity="0.88"/>
+      <line x1="28" y1="58" x2="28" y2="105" stroke="#FFF" stroke-width="2.5"/>
+      <line x1="14" y1="105" x2="42" y2="105" stroke="#FFF" stroke-width="2.5"/>
+    </g>
+    <g transform="translate(305, 172) rotate(-9)">
+      <path d="M10 0 H46 L42 36 C40 50 34 58 28 58 C22 58 16 50 14 36 Z" fill="none" stroke="#FFF" stroke-width="2.5"/>
+      <path d="M13 24 H43 L42 36 C40 49 34 56 28 56 C22 56 16 49 14 36 Z" fill="#8B1E34" opacity="0.88"/>
+      <line x1="28" y1="58" x2="28" y2="105" stroke="#FFF" stroke-width="2.5"/>
+      <line x1="14" y1="105" x2="42" y2="105" stroke="#FFF" stroke-width="2.5"/>
+    </g>
+    <circle cx="298" cy="168" r="5" fill="${p.glow}"/>
+    <text x="300" y="362" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#FAF4E8">${title}</text>
+    <text x="300" y="390" text-anchor="middle" font-family="sans-serif" font-size="13" fill="${p.glow}">${subtitle}</text>
+  </svg>`;
+
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+function getSampleWines() {
+  return [
+    {
+      id: 'sample_1',
+      name: 'Catena Malbec',
+      type: 'Tinto',
+      vintage: '2021',
+      grapes: 'Malbec',
+      country: 'Argentina',
+      rating: 5.0,
+      score10: 9.5,
+      rebuy: true,
+      sensory: { body: 4, tannin: 3, acidity: 3, sweetness: 1 },
+      tastingDate: '2026-10-24',
+      location: 'Jantar em Casa',
+      companions: 'Amor',
+      occasion: 'Comemoração de aniversário',
+      pairing: 'Carne assada e risoto de queijo',
+      notes: 'Vinho super macio, encorpado na medida certa e não amarra a boca! Acompanhou muito bem o jantar e a noite foi inesquecível à luz de velas.',
+      labelPhoto: generateWineLabelIllustration({
+        name: 'Catena Malbec',
+        grapes: 'Malbec',
+        vintage: '2021',
+        type: 'Tinto',
+        country: 'Argentina'
+      }),
+      memoryPhoto: generateMemorySceneIllustration({
+        title: 'Noite de Comemoração à Luz de Velas',
+        subtitle: 'Jantar especial em casa • 24/10/2026',
+        mood: 'dinner'
+      })
+    },
+    {
+      id: 'sample_2',
+      name: 'Casillero del Diablo Reserva',
+      type: 'Branco',
+      vintage: '2023',
+      grapes: 'Sauvignon Blanc',
+      country: 'Chile',
+      rating: 4.5,
+      score10: 8.5,
+      rebuy: true,
+      sensory: { body: 2, tannin: 1, acidity: 4, sweetness: 1 },
+      tastingDate: '2026-11-02',
+      location: 'Varanda no fim de tarde',
+      companions: 'Melhores amigos',
+      occasion: 'Tarde ensolarada de sábado',
+      pairing: 'Peixe grelhado e petiscos',
+      notes: 'Bem levinho e super refrescante para tomar gelado num dia quente! Todo mundo gostou, desce fácil e deixou a conversa da tarde ainda melhor.',
+      labelPhoto: generateWineLabelIllustration({
+        name: 'Casillero del Diablo',
+        grapes: 'Sauvignon Blanc',
+        vintage: '2023',
+        type: 'Branco',
+        country: 'Chile'
+      }),
+      memoryPhoto: generateMemorySceneIllustration({
+        title: 'Pôr do Sol na Varanda com Amigos',
+        subtitle: 'Almoço de sábado que virou jantar • 02/11/2026',
+        mood: 'sunset'
+      })
+    },
+    {
+      id: 'sample_3',
+      name: 'Cave Geisse Brut Rosé',
+      type: 'Espumante',
+      vintage: '2022',
+      grapes: 'Pinot Noir',
+      country: 'Brasil',
+      rating: 4.5,
+      score10: 9.0,
+      rebuy: true,
+      sensory: { body: 3, tannin: 1, acidity: 4, sweetness: 1 },
+      tastingDate: '2026-11-10',
+      location: 'Piquenique no Mirante',
+      companions: 'Família reunida',
+      occasion: 'Brinde às conquistas do ano',
+      pairing: 'Tábua de queijos e morangos',
+      notes: 'Borbulhas bem fininhas e muito agradável de beber! Ótimo espumante brasileiro para brindar em família.',
+      labelPhoto: generateWineLabelIllustration({
+        name: 'Cave Geisse Rosé',
+        grapes: 'Pinot Noir',
+        vintage: '2022',
+        type: 'Espumante',
+        country: 'Brasil'
+      }),
+      memoryPhoto: generateMemorySceneIllustration({
+        title: 'Brinde em Família no Mirante',
+        subtitle: 'Tarde especial de celebração • 10/11/2026',
+        mood: 'celebration'
+      })
+    },
+    {
+      id: 'sample_cellar_1',
+      status: 'cellar',
+      quantity: 2,
+      name: 'Marqués de Casa Concha',
+      type: 'Tinto',
+      vintage: '2021',
+      grapes: 'Carménère',
+      country: 'Chile',
+      cellarObs: 'Guardado para um jantar de massas ou carnes',
+      labelPhoto: generateWineLabelIllustration({
+        name: 'Marqués de Casa Concha',
+        grapes: 'Carménère',
+        vintage: '2021',
+        type: 'Tinto',
+        country: 'Chile'
+      })
+    },
+    {
+      id: 'sample_cellar_2',
+      status: 'cellar',
+      quantity: 1,
+      name: 'Cartuxa EA Reserva',
+      type: 'Tinto',
+      vintage: '2022',
+      grapes: 'Blend / Corte (Várias uvas)',
+      country: 'Portugal',
+      cellarObs: 'Presente especial — abrir no fim de semana',
+      labelPhoto: generateWineLabelIllustration({
+        name: 'Cartuxa EA Reserva',
+        grapes: 'Blend Alentejano',
+        vintage: '2022',
+        type: 'Tinto',
+        country: 'Portugal'
+      })
+    }
+  ];
+}
+
+window.wineDB = new WineDatabase();
+window.compressImageFile = compressImageFile;
+window.generateWineLabelIllustration = generateWineLabelIllustration;
+window.getSampleWines = getSampleWines;
+
+
+/**
+ * VinoMemo — Aplicação Principal (Tomados + Adega Virtual Integrada + Nuvem Supabase)
+ */
+
+const SENSORY_LABELS = {
+  body: ['Bem Leve', 'Leve', 'Médio', 'Encorpado', 'Bem Encorpado'],
+  tannin: ['Não amarra', 'Bem Macio', 'Equilibrado', 'Amarra um pouco', 'Amarra bastante'],
+  acidity: ['Suave', 'Leve frescor', 'Refrescante', 'Bem Fresco', 'Muito Refrescante'],
+  sweetness: ['Seco (Zero doce)', 'Quase Seco', 'Levemente Adocicado', 'Suave / Doce', 'Bem Doce']
+};
+
+const state = {
+  wines: [], // Contém tanto os 'tasted' (já tomados) quanto os 'cellar' (guardados na adega)
+  currentView: 'catalog',
+  filterType: 'all',
+  filterRating: 0,
+  filterRebuy: 'all',
+  sortOrder: 'date_desc',
+  searchQuery: '',
+  cellarFilterType: 'all',
+  cellarSearchQuery: '',
+  currentLabelPhoto: '',
+  currentMemoryPhoto: '',
+  currentCellarLabelPhoto: '',
+  editingCreatedAt: null
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  initTheme();
+  initCloudStatusUI();
+  bindEvents();
+  await loadInitialData();
+});
+
+function isCellarWine(wine) {
+  return wine && wine.status === 'cellar';
+}
+
+function getTastedWines() {
+  return state.wines.filter((w) => !isCellarWine(w));
+}
+
+function getCellarWines() {
+  return state.wines.filter((w) => isCellarWine(w));
+}
+
+function getNormalizedScore10(wine) {
+  if (wine.score10 !== undefined && wine.score10 !== null && wine.score10 !== '') {
+    return Number(wine.score10);
+  }
+  if (wine.score100 !== undefined && wine.score100 !== null && wine.score100 !== '') {
+    return Number((Number(wine.score100) / 10).toFixed(1));
+  }
+  return null;
+}
+
+function initCloudStatusUI() {
+  const btn = document.getElementById('btnCloudConfig');
+  const label = document.getElementById('cloudStatusLabel');
+
+  const updateBadge = (status, msg) => {
+    btn.classList.remove('unconfigured', 'connected', 'syncing', 'error');
+    btn.classList.add(status || 'unconfigured');
+    if (status === 'connected') {
+      label.textContent = '☁️ Nuvem Ativa';
+      btn.title = msg || 'Sincronizado com o Banco na Nuvem';
+    } else if (status === 'syncing') {
+      label.textContent = '🔄 Sincronizando...';
+      btn.title = msg || 'Sincronizando...';
+    } else if (status === 'error') {
+      label.textContent = '⚠️ Nuvem Offline';
+      btn.title = msg || 'Erro ao conectar na nuvem';
+    } else {
+      label.textContent = '☁️ Conectar Nuvem';
+      btn.title = 'Configurar Banco de Dados na Nuvem';
+    }
+  };
+
+  window.wineDB.cloud.onStatusChange = updateBadge;
+  updateBadge(window.wineDB.cloud.status);
+}
+
+async function loadInitialData() {
+  try {
+    let wines = await window.wineDB.getAllWines();
+    const hasSeeded = localStorage.getItem('vinomemo_initial_seeded');
+
+    if (wines.length === 0 && !hasSeeded) {
+      const samples = window.getSampleWines();
+      await window.wineDB.importMany(samples);
+      localStorage.setItem('vinomemo_initial_seeded', 'true');
+      wines = await window.wineDB.getAllWines();
+      showToast('Bem-vindo ao VinoMemo! Carregamos exemplos nos Tomados e na sua Adega Virtual.');
+    } else {
+      // Se já tinha os 3 exemplos antigos mas ainda não tinha exemplo na Adega Virtual, adiciona 2 exemplos na Adega uma única vez
+      const hasCellarSeeded = localStorage.getItem('vinomemo_cellar_seeded');
+      if (!hasCellarSeeded && !wines.some((w) => w.status === 'cellar')) {
+        const cellarSamples = window.getSampleWines().filter((w) => w.status === 'cellar');
+        await window.wineDB.importMany(cellarSamples);
+        localStorage.setItem('vinomemo_cellar_seeded', 'true');
+        wines = await window.wineDB.getAllWines();
+      }
+    }
+
+    state.wines = wines;
+    refreshAllUI();
+  } catch (err) {
+    console.error('Erro ao carregar vinhos:', err);
+    showToast('Erro ao acessar o banco de dados.');
+  }
+}
+
+function refreshAllUI() {
+  updateSummaryRibbon();
+  renderCatalog();
+  renderCellarView();
+  renderMemoriesWall();
+  renderStatsDashboard();
+}
+
+function switchToView(viewName) {
+  state.currentView = viewName;
+  document.querySelectorAll('.nav-tab').forEach((t) => {
+    t.classList.toggle('active', t.dataset.view === viewName);
+  });
+  document.querySelectorAll('.view-section').forEach((sec) => sec.classList.remove('active'));
+  if (viewName === 'catalog') document.getElementById('viewCatalog').classList.add('active');
+  if (viewName === 'cellar') document.getElementById('viewCellar').classList.add('active');
+  if (viewName === 'memories') document.getElementById('viewMemories').classList.add('active');
+  if (viewName === 'stats') document.getElementById('viewStats').classList.add('active');
+}
+
+/* ==========================================
+   SUMMARY RIBBON
+========================================== */
+function updateSummaryRibbon() {
+  const tasted = getTastedWines();
+  const cellar = getCellarWines();
+
+  const totalTasted = tasted.length;
+  const totalCellarBottles = cellar.reduce((acc, w) => acc + (Number(w.quantity) || 1), 0);
+
+  document.getElementById('quickTotalWines').textContent = totalTasted;
+  document.getElementById('quickCellarCount').textContent = totalCellarBottles;
+  document.getElementById('navCellarBadge').textContent = totalCellarBottles;
+
+  if (totalTasted === 0) {
+    document.getElementById('quickAvgRating').textContent = '0.0 ★';
+    document.getElementById('quickTopGrape').textContent = '—';
+    return;
+  }
+
+  const avg = tasted.reduce((acc, w) => acc + (Number(w.rating) || 0), 0) / totalTasted;
+  document.getElementById('quickAvgRating').textContent = avg.toFixed(1) + ' ★';
+
+  const grapeCounts = {};
+  tasted.forEach((w) => {
+    if (!w.grapes) return;
+    w.grapes.split(/[,/;&]+/).forEach((g) => {
+      const clean = g.trim();
+      if (clean) grapeCounts[clean] = (grapeCounts[clean] || 0) + 1;
+    });
+  });
+  const topGrapeEntry = Object.entries(grapeCounts).sort((a, b) => b[1] - a[1])[0];
+  document.getElementById('quickTopGrape').textContent = topGrapeEntry ? topGrapeEntry[0] : '—';
+}
+
+/* ==========================================
+   VIEW 1: CATALOG (TASTED WINES)
+========================================== */
+function getFilteredAndSortedWines() {
+  const q = state.searchQuery.trim().toLowerCase();
+  const tastedWines = getTastedWines();
+
+  const filtered = tastedWines.filter((w) => {
+    if (state.filterType !== 'all' && w.type !== state.filterType) return false;
+    if (state.filterRating > 0 && (Number(w.rating) || 0) < state.filterRating) return false;
+    if (state.filterRebuy === 'yes' && !w.rebuy) return false;
+    if (state.filterRebuy === 'withMoment' && !w.memoryPhoto) return false;
+
+    if (q) {
+      const haystack = [
+        w.name,
+        w.grapes,
+        w.country,
+        w.vintage,
+        w.location,
+        w.companions,
+        w.occasion,
+        w.pairing,
+        w.notes
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      if (!haystack.includes(q)) return false;
+    }
+
+    return true;
+  });
+
+  filtered.sort((a, b) => {
+    switch (state.sortOrder) {
+      case 'date_desc':
+        return (b.tastingDate || b.createdAt || '').localeCompare(a.tastingDate || a.createdAt || '');
+      case 'date_asc':
+        return (a.tastingDate || a.createdAt || '').localeCompare(b.tastingDate || b.createdAt || '');
+      case 'rating_desc':
+        return (Number(b.rating) || 0) - (Number(a.rating) || 0);
+      case 'score_desc':
+        return (getNormalizedScore10(b) || 0) - (getNormalizedScore10(a) || 0);
+      case 'name_asc':
+        return (a.name || '').localeCompare(b.name || '');
+      case 'vintage_desc':
+        return (parseInt(b.vintage) || 0) - (parseInt(a.vintage) || 0);
+      default:
+        return 0;
+    }
+  });
+
+  return filtered;
+}
+
+function getTypeBadgeClass(type) {
+  switch (type) {
+    case 'Tinto': return 'badge-tinto';
+    case 'Branco': return 'badge-branco';
+    case 'Rosé': return 'badge-rose';
+    case 'Espumante': return 'badge-espumante';
+    case 'Sobremesa/Fortificado': return 'badge-fortificado';
+    default: return 'badge-tinto';
+  }
+}
+
+function formatDateBR(dateStr) {
+  if (!dateStr) return 'Sem data';
+  const parts = dateStr.split('-');
+  if (parts.length !== 3) return dateStr;
+  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+function renderCatalog() {
+  const grid = document.getElementById('wineGrid');
+  const emptyState = document.getElementById('emptyState');
+  const filtered = getFilteredAndSortedWines();
+  const totalTasted = getTastedWines().length;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    emptyState.classList.remove('hidden');
+    const titleEl = document.getElementById('emptyStateTitle');
+    const descEl = document.getElementById('emptyStateDesc');
+    if (totalTasted > 0) {
+      titleEl.textContent = 'Nenhum rótulo encontrado com esses filtros';
+      descEl.textContent = 'Experimente limpar a busca ou selecionar "Todos" os tipos de vinho.';
+    } else {
+      titleEl.textContent = 'Nenhum vinho avaliado ainda';
+      descEl.textContent = 'Avalie um vinho que você tomou ou escolha uma garrafa da sua Adega Virtual para abrir e avaliar!';
+    }
+    return;
+  }
+
+  emptyState.classList.add('hidden');
+
+  grid.innerHTML = filtered
+    .map((wine) => {
+      const mainImg =
+        wine.labelPhoto ||
+        window.generateWineLabelIllustration({
+          name: wine.name,
+          grapes: wine.grapes,
+          vintage: wine.vintage,
+          type: wine.type,
+          country: wine.country
+        });
+
+      const sensory = wine.sensory || { body: 3, tannin: 3, acidity: 3, sweetness: 1 };
+      const score10 = getNormalizedScore10(wine);
+
+      return `
+      <article class="wine-card" data-id="${escapeHtml(wine.id)}">
+        <div class="card-media">
+          <img class="card-main-photo" src="${mainImg}" alt="${escapeHtml(wine.name)}" loading="lazy" />
+          <div class="card-badges-top">
+            <span class="badge-type ${getTypeBadgeClass(wine.type)}">${escapeHtml(wine.type)}</span>
+            <span class="badge-rating-pill">
+              ★ ${Number(wine.rating || 0).toFixed(1)}
+              ${score10 !== null ? `<small style="opacity:0.9">• Nota ${score10}</small>` : ''}
+            </span>
+          </div>
+          ${
+            wine.memoryPhoto
+              ? `
+            <div class="card-moment-pip" title="Foto da lembrança do dia">
+              <img src="${wine.memoryPhoto}" alt="Lembrança do dia" loading="lazy" />
+              <span>Lembrança</span>
+            </div>`
+              : ''
+          }
+        </div>
+
+        <div class="card-body">
+          <div class="card-winery-row">
+            <span>🌍 ${escapeHtml(wine.country || 'País não informado')}</span>
+            <span>📅 ${escapeHtml(wine.vintage || 'Sem ano')}</span>
+          </div>
+
+          <h3 class="card-title">${escapeHtml(wine.name)}</h3>
+
+          <div class="card-meta-tags">
+            ${wine.grapes ? `<span class="meta-chip">🍇 ${escapeHtml(wine.grapes)}</span>` : ''}
+            ${wine.country ? `<span class="meta-chip">🌍 ${escapeHtml(wine.country)}</span>` : ''}
+            ${wine.vintage ? `<span class="meta-chip">📅 Ano ${escapeHtml(wine.vintage)}</span>` : ''}
+          </div>
+
+          <div class="card-sensory-mini" title="Como você sentiu o vinho">
+            <div class="mini-stat">
+              <span class="mini-stat-label">Corpo</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${(sensory.body / 5) * 100}%"></div></div>
+            </div>
+            <div class="mini-stat">
+              <span class="mini-stat-label">Tanino</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${(sensory.tannin / 5) * 100}%"></div></div>
+            </div>
+            <div class="mini-stat">
+              <span class="mini-stat-label">Frescor</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${(sensory.acidity / 5) * 100}%"></div></div>
+            </div>
+            <div class="mini-stat">
+              <span class="mini-stat-label">Doçura</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${(sensory.sweetness / 5) * 100}%"></div></div>
+            </div>
+          </div>
+
+          <p class="card-notes-excerpt">“${escapeHtml(wine.notes || 'Sem comentário registrado.')}”</p>
+
+          <div class="card-memory-footer">
+            <div class="memory-context">
+              <span>📅 ${formatDateBR(wine.tastingDate)}</span>
+              ${wine.companions ? `<span>• 👥 ${escapeHtml(wine.companions)}</span>` : ''}
+              ${wine.location ? `<span>• 📌 ${escapeHtml(wine.location)}</span>` : ''}
+            </div>
+            ${wine.rebuy ? `<span class="rebuy-heart" title="Compraria novamente">♥ Favorito</span>` : ''}
+          </div>
+        </div>
+      </article>
+    `;
+    })
+    .join('');
+
+  grid.querySelectorAll('.wine-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      openWineDetailModal(card.dataset.id);
+    });
+  });
+}
+
+/* ==========================================
+   VIEW 2: ADEGA VIRTUAL (CELLAR + MINI DASHBOARD)
+========================================== */
+function renderCellarMiniDashboard(allCellarWines) {
+  const dash = document.getElementById('cellarMiniDashboard');
+  if (!dash) return;
+
+  if (allCellarWines.length === 0) {
+    dash.classList.add('hidden');
+    dash.innerHTML = '';
+    return;
+  }
+
+  dash.classList.remove('hidden');
+
+  const totalLabels = allCellarWines.length;
+  const totalBottles = allCellarWines.reduce((acc, w) => acc + (Number(w.quantity) || 1), 0);
+
+  // Contagem de garrafas por Tipo de Vinho
+  const typeOrder = [
+    { key: 'Tinto', label: '🍷 Tintos', segClass: 'seg-tinto', dotClass: 'dot-tinto' },
+    { key: 'Branco', label: '🥂 Brancos', segClass: 'seg-branco', dotClass: 'dot-branco' },
+    { key: 'Rosé', label: '🌸 Rosés', segClass: 'seg-rose', dotClass: 'dot-rose' },
+    { key: 'Espumante', label: '🍾 Espumantes', segClass: 'seg-espumante', dotClass: 'dot-espumante' },
+    { key: 'Sobremesa/Fortificado', label: '🍯 Licorosos', segClass: 'seg-fortificado', dotClass: 'dot-fortificado' }
+  ];
+
+  const bottlesByType = {};
+  const bottlesByGrape = {};
+  const bottlesByCountry = {};
+
+  allCellarWines.forEach((w) => {
+    const qty = Number(w.quantity) || 1;
+    const t = w.type || 'Tinto';
+    bottlesByType[t] = (bottlesByType[t] || 0) + qty;
+
+    if (w.grapes) {
+      w.grapes.split(/[,/;&]+/).forEach((g) => {
+        const clean = g.trim();
+        if (clean) bottlesByGrape[clean] = (bottlesByGrape[clean] || 0) + qty;
+      });
+    }
+
+    if (w.country) {
+      const c = w.country.trim();
+      if (c) bottlesByCountry[c] = (bottlesByCountry[c] || 0) + qty;
+    }
+  });
+
+  const grapeEntries = Object.entries(bottlesByGrape).sort((a, b) => b[1] - a[1]);
+  const countryEntries = Object.entries(bottlesByCountry).sort((a, b) => b[1] - a[1]);
+
+  const activeTypes = typeOrder.filter((t) => (bottlesByType[t.key] || 0) > 0);
+
+  dash.innerHTML = `
+    <div class="cellar-dash-top">
+      <div class="cellar-stat-box">
+        <span class="cellar-stat-num">${totalBottles}</span>
+        <span class="cellar-stat-label">🍾 Garrafas em Casa</span>
+      </div>
+      <div class="cellar-stat-box">
+        <span class="cellar-stat-num">${totalLabels}</span>
+        <span class="cellar-stat-label">🏷️ Rótulos Diferentes</span>
+      </div>
+      <div class="cellar-stat-box">
+        <span class="cellar-stat-num">${grapeEntries.length}</span>
+        <span class="cellar-stat-label">🍇 Tipos de Uva</span>
+      </div>
+      <div class="cellar-stat-box">
+        <span class="cellar-stat-num">${countryEntries.length}</span>
+        <span class="cellar-stat-label">🌍 Países na Adega</span>
+      </div>
+    </div>
+
+    <div class="cellar-type-breakdown">
+      <span class="cellar-breakdown-title">📊 Composição da Sua Adega por Estilo</span>
+      <div class="cellar-stacked-bar">
+        ${activeTypes
+          .map((t) => {
+            const count = bottlesByType[t.key];
+            const pct = Math.max(5, Math.round((count / totalBottles) * 100));
+            return `<div class="stacked-segment ${t.segClass}" style="width:${pct}%" title="${t.label}: ${count} garrafa(s)"></div>`;
+          })
+          .join('')}
+      </div>
+      <div class="cellar-legend-pills">
+        ${activeTypes
+          .map((t) => {
+            const count = bottlesByType[t.key];
+            return `
+              <span class="cellar-legend-item">
+                <span class="dot ${t.dotClass}"></span>
+                ${t.label}: <strong>${count}</strong>
+              </span>
+            `;
+          })
+          .join('')}
+      </div>
+    </div>
+
+    <div class="cellar-highlights-row">
+      <div class="cellar-highlight-group">
+        <strong>🍇 Uvas prontas para abrir</strong>
+        <div class="cellar-tags-wrap">
+          ${
+            grapeEntries.length
+              ? grapeEntries
+                  .map(
+                    ([grape, qty]) =>
+                      `<span class="meta-chip">${escapeHtml(grape)} <strong>(${qty})</strong></span>`
+                  )
+                  .join('')
+              : '<span class="field-hint">Nenhuma uva informada</span>'
+          }
+        </div>
+      </div>
+
+      <div class="cellar-highlight-group">
+        <strong>🌍 Países disponíveis em casa</strong>
+        <div class="cellar-tags-wrap">
+          ${
+            countryEntries.length
+              ? countryEntries
+                  .map(
+                    ([country, qty]) =>
+                      `<span class="meta-chip">${escapeHtml(country)} <strong>(${qty})</strong></span>`
+                  )
+                  .join('')
+              : '<span class="field-hint">Nenhum país informado</span>'
+          }
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderCellarView() {
+  const grid = document.getElementById('cellarGrid');
+  const emptyState = document.getElementById('cellarEmptyState');
+  const q = state.cellarSearchQuery.trim().toLowerCase();
+
+  const allCellar = getCellarWines();
+  renderCellarMiniDashboard(allCellar);
+
+  const cellarWines = allCellar.filter((w) => {
+    if (state.cellarFilterType !== 'all' && w.type !== state.cellarFilterType) return false;
+    if (q) {
+      const hay = [w.name, w.grapes, w.country, w.vintage, w.cellarObs].filter(Boolean).join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  if (cellarWines.length === 0) {
+    grid.innerHTML = '';
+    emptyState.classList.remove('hidden');
+    return;
+  }
+
+  emptyState.classList.add('hidden');
+
+  grid.innerHTML = cellarWines
+    .map((wine) => {
+      const mainImg =
+        wine.labelPhoto ||
+        window.generateWineLabelIllustration({
+          name: wine.name,
+          grapes: wine.grapes,
+          vintage: wine.vintage,
+          type: wine.type,
+          country: wine.country
+        });
+      const qty = Number(wine.quantity) || 1;
+
+      return `
+      <article class="wine-card cellar-card" data-id="${escapeHtml(wine.id)}" style="cursor:default;">
+        <div class="card-media">
+          <img class="card-main-photo" src="${mainImg}" alt="${escapeHtml(wine.name)}" loading="lazy" />
+          <div class="card-badges-top">
+            <span class="badge-type ${getTypeBadgeClass(wine.type)}">${escapeHtml(wine.type)}</span>
+            <span class="cellar-qty-badge">🍾 ${qty} ${qty === 1 ? 'garrafa' : 'garrafas'}</span>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="card-winery-row">
+            <span>🌍 ${escapeHtml(wine.country || 'País não informado')}</span>
+            <span>📅 ${escapeHtml(wine.vintage || 'Sem safra')}</span>
+          </div>
+
+          <h3 class="card-title">${escapeHtml(wine.name)}</h3>
+
+          <div class="card-meta-tags">
+            ${wine.grapes ? `<span class="meta-chip">🍇 ${escapeHtml(wine.grapes)}</span>` : ''}
+            ${wine.country ? `<span class="meta-chip">🌍 ${escapeHtml(wine.country)}</span>` : ''}
+            ${wine.vintage ? `<span class="meta-chip">📅 Ano ${escapeHtml(wine.vintage)}</span>` : ''}
+          </div>
+
+          ${
+            wine.cellarObs
+              ? `<p class="card-notes-excerpt" style="font-style:normal; color:var(--text-muted);">📌 ${escapeHtml(wine.cellarObs)}</p>`
+              : ''
+          }
+
+          <div class="cellar-card-footer">
+            <div class="cellar-qty-controls">
+              <span>Estoque em casa:</span>
+              <div class="qty-stepper">
+                <button type="button" class="qty-btn btn-qty-minus" data-id="${escapeHtml(wine.id)}" title="Diminuir 1">-</button>
+                <strong>${qty}</strong>
+                <button type="button" class="qty-btn btn-qty-plus" data-id="${escapeHtml(wine.id)}" title="Adicionar +1">+</button>
+              </div>
+            </div>
+
+            <div class="cellar-action-row">
+              <button type="button" class="btn-drink-evaluate" data-id="${escapeHtml(wine.id)}">
+                🍷 Tomei! Avaliar agora
+              </button>
+              <button type="button" class="btn-secondary btn-sm btn-edit-cellar" data-id="${escapeHtml(wine.id)}" title="Editar dados da garrafa">
+                ✎
+              </button>
+              <button type="button" class="btn-secondary btn-sm btn-delete-cellar" data-id="${escapeHtml(wine.id)}" title="Remover da adega">
+                🗑️
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+    `;
+    })
+    .join('');
+
+  // Bind buttons on Cellar cards
+  grid.querySelectorAll('.btn-drink-evaluate').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const wine = state.wines.find((w) => w.id === btn.dataset.id);
+      if (wine) openEvaluateFromCellarModal(wine);
+    });
+  });
+
+  grid.querySelectorAll('.btn-edit-cellar').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const wine = state.wines.find((w) => w.id === btn.dataset.id);
+      if (wine) openCellarFormModal(wine);
+    });
+  });
+
+  grid.querySelectorAll('.btn-delete-cellar').forEach((btn) => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const wine = state.wines.find((w) => w.id === btn.dataset.id);
+      if (wine && confirm(`Remover "${wine.name}" da sua Adega Virtual?`)) {
+        await window.wineDB.deleteWine(wine.id);
+        state.wines = await window.wineDB.getAllWines();
+        refreshAllUI();
+        showToast('Garrafa removida da Adega Virtual.');
+      }
+    });
+  });
+
+  grid.querySelectorAll('.btn-qty-plus').forEach((btn) => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const wine = state.wines.find((w) => w.id === btn.dataset.id);
+      if (!wine) return;
+      wine.quantity = (Number(wine.quantity) || 1) + 1;
+      await window.wineDB.saveWine(wine);
+      state.wines = await window.wineDB.getAllWines();
+      refreshAllUI();
+    });
+  });
+
+  grid.querySelectorAll('.btn-qty-minus').forEach((btn) => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const wine = state.wines.find((w) => w.id === btn.dataset.id);
+      if (!wine) return;
+      const currentQty = Number(wine.quantity) || 1;
+      if (currentQty <= 1) {
+        if (confirm(`Você tem 1 garrafa de "${wine.name}". Deseja avaliá-lo como tomado ou removê-lo da adega? Clique em OK para avaliar!`)) {
+          openEvaluateFromCellarModal(wine);
+        }
+        return;
+      }
+      wine.quantity = currentQty - 1;
+      await window.wineDB.saveWine(wine);
+      state.wines = await window.wineDB.getAllWines();
+      refreshAllUI();
+    });
+  });
+}
+
+/* ==========================================
+   VIEW 3: MEMORIES POLAROID WALL
+========================================== */
+function renderMemoriesWall() {
+  const container = document.getElementById('memoriesGrid');
+  const tasted = getTastedWines();
+
+  if (tasted.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state" style="grid-column: 1 / -1;">
+        <h2>Nenhuma lembrança registrada ainda</h2>
+        <p>Ao avaliar um vinho, coloque uma Foto do Dia, com quem você estava e o lugar para montar seu mural de recordações.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const sortedByDate = [...tasted].sort((a, b) =>
+    (b.tastingDate || b.createdAt || '').localeCompare(a.tastingDate || a.createdAt || '')
+  );
+
+  container.innerHTML = sortedByDate
+    .map((wine) => {
+      const photo =
+        wine.memoryPhoto ||
+        wine.labelPhoto ||
+        window.generateWineLabelIllustration({
+          name: wine.name,
+          grapes: wine.grapes,
+          vintage: wine.vintage,
+          type: wine.type,
+          country: wine.country
+        });
+
+      return `
+      <div class="polaroid-card" data-id="${escapeHtml(wine.id)}">
+        <div class="polaroid-photo-frame">
+          <img src="${photo}" alt="Memória com ${escapeHtml(wine.name)}" loading="lazy" />
+          <span class="polaroid-date-stamp">${formatDateBR(wine.tastingDate)}</span>
+        </div>
+        <h3 class="polaroid-caption-title">${escapeHtml(wine.occasion || wine.location || wine.name)}</h3>
+        <div class="polaroid-meta">
+          <span>🍷 <strong>${escapeHtml(wine.name)}</strong> ${wine.vintage ? `(${escapeHtml(wine.vintage)})` : ''}</span>
+          ${wine.companions ? `<span>• 👥 ${escapeHtml(wine.companions)}</span>` : ''}
+          ${wine.location ? `<span>• 📍 ${escapeHtml(wine.location)}</span>` : ''}
+          ${wine.pairing ? `<span>• 🍽️ ${escapeHtml(wine.pairing)}</span>` : ''}
+        </div>
+        <div class="polaroid-quote">
+          “${escapeHtml((wine.notes || '').slice(0, 160))}${(wine.notes || '').length > 160 ? '...' : ''}”
+        </div>
+      </div>
+    `;
+    })
+    .join('');
+
+  container.querySelectorAll('.polaroid-card').forEach((card) => {
+    card.addEventListener('click', () => openWineDetailModal(card.dataset.id));
+  });
+}
+
+/* ==========================================
+   VIEW 4: STATISTICS & PALATE PROFILE
+========================================== */
+function renderStatsDashboard() {
+  const container = document.getElementById('statsContent');
+  const wines = getTastedWines();
+  const cellarWines = getCellarWines();
+  const totalCellarBottles = cellarWines.reduce((acc, w) => acc + (Number(w.quantity) || 1), 0);
+
+  if (wines.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state span-12">
+        <h2>Avalie seus rótulos para descobrir o seu gosto</h2>
+        <p>Você tem <strong>${totalCellarBottles} garrafa(s)</strong> guardadas na sua Adega Virtual. Conforme avaliar os vinhos tomados, mostraremos quais uvas, países e estilos você mais gosta.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const total = wines.length;
+  const avgRating = wines.reduce((acc, w) => acc + (Number(w.rating) || 0), 0) / total;
+  const winesWithScore10 = wines.map((w) => getNormalizedScore10(w)).filter((v) => v !== null);
+  const avgScore10 =
+    winesWithScore10.length > 0
+      ? winesWithScore10.reduce((acc, v) => acc + v, 0) / winesWithScore10.length
+      : null;
+  const favCount = wines.filter((w) => w.rebuy).length;
+
+  const avgSensory = { body: 0, tannin: 0, acidity: 0, sweetness: 0 };
+  wines.forEach((w) => {
+    const s = w.sensory || { body: 3, tannin: 3, acidity: 3, sweetness: 1 };
+    avgSensory.body += Number(s.body) || 3;
+    avgSensory.tannin += Number(s.tannin) || 3;
+    avgSensory.acidity += Number(s.acidity) || 3;
+    avgSensory.sweetness += Number(s.sweetness) || 1;
+  });
+  Object.keys(avgSensory).forEach((k) => {
+    avgSensory[k] = (avgSensory[k] / total).toFixed(1);
+  });
+
+  const byType = countOccurrences(wines.map((w) => w.type || 'Tinto'));
+
+  const allGrapes = [];
+  wines.forEach((w) => {
+    if (w.grapes) {
+      w.grapes.split(/[,/;&]+/).forEach((g) => {
+        const clean = g.trim();
+        if (clean) allGrapes.push(clean);
+      });
+    }
+  });
+  const topGrapes = countOccurrences(allGrapes).slice(0, 6);
+  const topCountries = countOccurrences(wines.map((w) => w.country).filter(Boolean)).slice(0, 6);
+
+  container.innerHTML = `
+    <div class="kpi-cards-row">
+      <div class="kpi-card">
+        <span class="kpi-num">${total}</span>
+        <span class="kpi-title">Vinhos Avaliados</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-num">${totalCellarBottles}</span>
+        <span class="kpi-title">Garrafas na Adega Virtual</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-num">${avgScore10 !== null ? `${avgScore10.toFixed(1)} / 10` : `${avgRating.toFixed(1)} ★`}</span>
+        <span class="kpi-title">Nota Pessoal Média</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-num">${favCount}</span>
+        <span class="kpi-title">Compraria Novamente (♥)</span>
+      </div>
+    </div>
+
+    <div class="stat-panel span-6">
+      <h3>🧭 Como é o seu Paladar? (Média dos seus vinhos)</h3>
+      <div class="bar-list">
+        ${renderStatBar('💧 Peso na Boca (Corpo)', `${avgSensory.body} de 5`, (avgSensory.body / 5) * 100)}
+        ${renderStatBar('👅 Sensação de Amarrar (Tanino)', `${avgSensory.tannin} de 5`, (avgSensory.tannin / 5) * 100)}
+        ${renderStatBar('🍋 Refrescância (Acidez)', `${avgSensory.acidity} de 5`, (avgSensory.acidity / 5) * 100)}
+        ${renderStatBar('🍯 Doçura', `${avgSensory.sweetness} de 5`, (avgSensory.sweetness / 5) * 100)}
+      </div>
+    </div>
+
+    <div class="stat-panel span-6">
+      <h3>🍷 Estilos que você mais tomou</h3>
+      <div class="bar-list">
+        ${byType.map(([label, count]) => renderStatBar(label, `${count} vinho(s)`, (count / total) * 100)).join('')}
+      </div>
+    </div>
+
+    <div class="stat-panel span-6">
+      <h3>🍇 Tipos de Uva Favoritos</h3>
+      <div class="bar-list">
+        ${
+          topGrapes.length
+            ? topGrapes.map(([label, count]) => renderStatBar(label, `${count}x`, (count / topGrapes[0][1]) * 100)).join('')
+            : '<p style="color:var(--text-muted)">Nenhuma uva informada ainda.</p>'
+        }
+      </div>
+    </div>
+
+    <div class="stat-panel span-6">
+      <h3>🌍 Países que você mais provou</h3>
+      <div class="bar-list">
+        ${
+          topCountries.length
+            ? topCountries.map(([label, count]) => renderStatBar(label, `${count}x`, (count / topCountries[0][1]) * 100)).join('')
+            : '<p style="color:var(--text-muted)">Nenhum país informado ainda.</p>'
+        }
+      </div>
+    </div>
+  `;
+}
+
+function renderStatBar(label, rightText, percent) {
+  return `
+    <div class="bar-row">
+      <div class="bar-row-header">
+        <span>${escapeHtml(label)}</span>
+        <span>${escapeHtml(rightText)}</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: ${Math.min(100, Math.max(6, percent))}%"></div>
+      </div>
+    </div>
+  `;
+}
+
+function countOccurrences(arr) {
+  const counts = {};
+  arr.forEach((item) => {
+    counts[item] = (counts[item] || 0) + 1;
+  });
+  return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+}
+
+/* ==========================================
+   DETAIL MODAL (FOR TASTED WINES)
+========================================== */
+function openWineDetailModal(wineId) {
+  const wine = state.wines.find((w) => w.id === wineId);
+  if (!wine) return;
+
+  const modal = document.getElementById('wineDetailModal');
+  const content = document.getElementById('wineDetailContent');
+
+  const labelImg =
+    wine.labelPhoto ||
+    window.generateWineLabelIllustration({
+      name: wine.name,
+      grapes: wine.grapes,
+      vintage: wine.vintage,
+      type: wine.type,
+      country: wine.country
+    });
+
+  const hasBothPhotos = Boolean(wine.memoryPhoto);
+  const sensory = wine.sensory || { body: 3, tannin: 3, acidity: 3, sweetness: 1 };
+  const score10 = getNormalizedScore10(wine);
+
+  content.innerHTML = `
+    <div class="modal-header">
+      <div>
+        <span class="modal-eyebrow">${escapeHtml(wine.type)} ${wine.country ? `• ${escapeHtml(wine.country)}` : ''}</span>
+        <h2>${escapeHtml(wine.name)}</h2>
+      </div>
+      <button type="button" class="modal-close" id="btnCloseDetailModal">&times;</button>
+    </div>
+
+    <div class="detail-hero">
+      <div class="detail-photos-showcase">
+        <div class="showcase-box ${hasBothPhotos ? '' : 'SinglePhoto'}">
+          <img src="${labelImg}" alt="Foto do Rótulo" />
+          <span class="showcase-caption">🍾 Rótulo da Garrafa</span>
+        </div>
+        ${
+          hasBothPhotos
+            ? `
+          <div class="showcase-box">
+            <img src="${wine.memoryPhoto}" alt="Foto da Lembrança do Dia" />
+            <span class="showcase-caption">📸 Lembrança do Dia</span>
+          </div>`
+            : ''
+        }
+      </div>
+
+      <div class="detail-main-info">
+        <div class="detail-rating-bar">
+          <span class="detail-stars">${'★'.repeat(Math.round(wine.rating || 0))} ${Number(wine.rating || 0).toFixed(1)} / 5.0</span>
+          ${score10 !== null ? `<span class="detail-score100">Nota ${score10} / 10</span>` : ''}
+          ${wine.rebuy ? `<span class="meta-chip" style="color:var(--wine-primary); font-weight:700;">♥ Compraria novamente</span>` : ''}
+        </div>
+
+        <div class="detail-specs-grid">
+          <div class="spec-item">
+            <span class="spec-label">🍷 Tipo do Vinho</span>
+            <span class="spec-value">${escapeHtml(wine.type || '—')}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">🍇 Tipo de Uva</span>
+            <span class="spec-value">${escapeHtml(wine.grapes || '—')}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">🌍 País</span>
+            <span class="spec-value">${escapeHtml(wine.country || '—')}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">📅 Ano (Safra)</span>
+            <span class="spec-value">${escapeHtml(wine.vintage || '—')}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-body">
+      <div class="detail-memory-banner">
+        <h4>✨ Lembrança do Dia &amp; Sua Opinião</h4>
+        <div class="memory-facts">
+          <span>📅 <strong>Data:</strong> ${formatDateBR(wine.tastingDate)}</span>
+          ${wine.location ? `<span>📍 <strong>Onde:</strong> ${escapeHtml(wine.location)}</span>` : ''}
+          ${wine.companions ? `<span>👥 <strong>Com quem:</strong> ${escapeHtml(wine.companions)}</span>` : ''}
+          ${wine.occasion ? `<span>🎉 <strong>Ocasião:</strong> ${escapeHtml(wine.occasion)}</span>` : ''}
+          ${wine.pairing ? `<span>🍽️ <strong>O que comeu:</strong> ${escapeHtml(wine.pairing)}</span>` : ''}
+        </div>
+        <p class="detail-notes-text">${escapeHtml(wine.notes || '')}</p>
+      </div>
+
+      <div>
+        <h4 style="font-family:var(--font-serif); font-size:1.3rem; margin-bottom:0.75rem;">Como você sentiu esse vinho na boca</h4>
+        <div class="sensory-sliders-grid">
+          ${renderDetailSensoryBar('💧 Peso na Boca (Corpo)', SENSORY_LABELS.body[(sensory.body || 3) - 1], sensory.body || 3)}
+          ${renderDetailSensoryBar('👅 Sensação de Amarrar (Tanino)', SENSORY_LABELS.tannin[(sensory.tannin || 3) - 1], sensory.tannin || 3)}
+          ${renderDetailSensoryBar('🍋 Refrescância (Acidez)', SENSORY_LABELS.acidity[(sensory.acidity || 3) - 1], sensory.acidity || 3)}
+          ${renderDetailSensoryBar('🍯 Doçura', SENSORY_LABELS.sweetness[(sensory.sweetness || 1) - 1], sensory.sweetness || 1)}
+        </div>
+      </div>
+
+      <div class="detail-actions">
+        <button type="button" class="btn-danger" id="btnDeleteWine">Excluir</button>
+        <div style="display:flex; gap:0.65rem;">
+          <button type="button" class="btn-secondary" id="btnCloseDetailBottom">Fechar</button>
+          <button type="button" class="btn-primary" id="btnEditWine">✎ Editar Registro</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  modal.classList.remove('hidden');
+
+  document.getElementById('btnCloseDetailModal').onclick = () => modal.classList.add('hidden');
+  document.getElementById('btnCloseDetailBottom').onclick = () => modal.classList.add('hidden');
+
+  document.getElementById('btnEditWine').onclick = () => {
+    modal.classList.add('hidden');
+    openWineFormModal(wine);
+  };
+
+  document.getElementById('btnDeleteWine').onclick = async () => {
+    if (confirm(`Deseja realmente excluir "${wine.name}" do seu diário?`)) {
+      await window.wineDB.deleteWine(wine.id);
+      state.wines = await window.wineDB.getAllWines();
+      modal.classList.add('hidden');
+      refreshAllUI();
+      showToast('Rótulo removido do diário.');
+    }
+  };
+}
+
+function renderDetailSensoryBar(name, desc, val) {
+  return `
+    <div class="sensory-slider-item">
+      <div class="sensory-slider-header">
+        <label>${escapeHtml(name)}</label>
+        <span class="sensory-val-label">${escapeHtml(desc)} (${val}/5)</span>
+      </div>
+      <div class="bar-track" style="height:8px;">
+        <div class="bar-fill" style="width:${(val / 5) * 100}%"></div>
+      </div>
+    </div>
+  `;
+}
+
+/* ==========================================
+   ADEGA VIRTUAL FORM MODAL (GUARDAR EM CASA)
+========================================== */
+function openCellarFormModal(wine = null) {
+  const modal = document.getElementById('cellarFormModal');
+  const form = document.getElementById('cellarForm');
+  form.reset();
+
+  if (wine) {
+    document.getElementById('cellarModalEyebrow').textContent = 'Editar Garrafa da Adega';
+    document.getElementById('cellarModalTitle').textContent = wine.name;
+    document.getElementById('cellarWineId').value = wine.id;
+    state.editingCreatedAt = wine.createdAt || null;
+
+    document.getElementById('cellarWineName').value = wine.name || '';
+    document.getElementById('cellarWineType').value = wine.type || 'Tinto';
+    document.getElementById('cellarWineGrapes').value = wine.grapes || '';
+    document.getElementById('cellarWineCountry').value = wine.country || '';
+    document.getElementById('cellarWineVintage').value = wine.vintage || '';
+    document.getElementById('cellarWineQty').value = wine.quantity || 1;
+    document.getElementById('cellarWineObs').value = wine.cellarObs || '';
+    setPhotoPreview('cellarLabel', wine.labelPhoto || '');
+  } else {
+    document.getElementById('cellarModalEyebrow').textContent = '🏠 Minha Adega em Casa';
+    document.getElementById('cellarModalTitle').textContent = 'Guardar Vinho na Adega Virtual';
+    document.getElementById('cellarWineId').value = '';
+    state.editingCreatedAt = null;
+    document.getElementById('cellarWineQty').value = 1;
+    setPhotoPreview('cellarLabel', '');
+  }
+
+  modal.classList.remove('hidden');
+}
+
+/* ==========================================
+   INTEGRATION: ABRIR GARRAFA DA ADEGA -> AVALIAR
+========================================== */
+function openEvaluateFromCellarModal(cellarWine) {
+  const modal = document.getElementById('wineFormModal');
+  const form = document.getElementById('wineForm');
+  form.reset();
+
+  document.getElementById('formModalEyebrow').textContent = '🍷 Da Adega Virtual para Avaliação';
+  document.getElementById('formModalTitle').textContent = `Avaliar: ${cellarWine.name}`;
+  document.getElementById('wineId').value = '';
+  document.getElementById('fromCellarWineId').value = cellarWine.id;
+  document.getElementById('fromCellarBanner').classList.remove('hidden');
+  state.editingCreatedAt = null;
+
+  // Preenche todos os dados cadastrados na Adega Virtual automaticamente!
+  document.getElementById('wineName').value = cellarWine.name || '';
+  document.getElementById('wineType').value = cellarWine.type || 'Tinto';
+  document.getElementById('wineGrapes').value = cellarWine.grapes || '';
+  document.getElementById('wineCountry').value = cellarWine.country || '';
+  document.getElementById('wineVintage').value = cellarWine.vintage || '';
+
+  // Valores iniciais padrão para avaliação
+  document.getElementById('sensoryBody').value = 3;
+  document.getElementById('sensoryTannin').value = 3;
+  document.getElementById('sensoryAcidity').value = 3;
+  document.getElementById('sensorySweetness').value = 1;
+  document.getElementById('wineRating').value = 4.5;
+  updateStarPickerUI(4.5);
+  document.getElementById('wineScore10').value = '9.0';
+  document.getElementById('wineRebuy').checked = true;
+  document.getElementById('tastingDate').value = new Date().toISOString().slice(0, 10);
+
+  setPhotoPreview('label', cellarWine.labelPhoto || '');
+  setPhotoPreview('memory', '');
+
+  updateSensoryLabelsUI();
+  modal.classList.remove('hidden');
+}
+
+/* ==========================================
+   ADD / EDIT TASTED WINE MODAL
+========================================== */
+function openWineFormModal(wine = null) {
+  const modal = document.getElementById('wineFormModal');
+  const form = document.getElementById('wineForm');
+  form.reset();
+
+  document.getElementById('fromCellarWineId').value = '';
+  document.getElementById('fromCellarBanner').classList.add('hidden');
+
+  if (wine) {
+    document.getElementById('formModalEyebrow').textContent = 'Editar Avaliação';
+    document.getElementById('formModalTitle').textContent = wine.name;
+    document.getElementById('wineId').value = wine.id;
+    state.editingCreatedAt = wine.createdAt || null;
+
+    document.getElementById('wineName').value = wine.name || '';
+    document.getElementById('wineType').value = wine.type || 'Tinto';
+    document.getElementById('wineVintage').value = wine.vintage || '';
+    document.getElementById('wineGrapes').value = wine.grapes || '';
+    document.getElementById('wineCountry').value = wine.country || '';
+
+    const s = wine.sensory || { body: 3, tannin: 3, acidity: 3, sweetness: 1 };
+    document.getElementById('sensoryBody').value = s.body || 3;
+    document.getElementById('sensoryTannin').value = s.tannin || 3;
+    document.getElementById('sensoryAcidity').value = s.acidity || 3;
+    document.getElementById('sensorySweetness').value = s.sweetness || 1;
+
+    const ratingVal = Number(wine.rating) || 4.5;
+    document.getElementById('wineRating').value = ratingVal;
+    updateStarPickerUI(ratingVal);
+
+    const score10 = getNormalizedScore10(wine);
+    document.getElementById('wineScore10').value = score10 !== null ? score10 : '';
+    document.getElementById('wineRebuy').checked = Boolean(wine.rebuy);
+
+    document.getElementById('tastingDate').value = wine.tastingDate || new Date().toISOString().slice(0, 10);
+    document.getElementById('tastingLocation').value = wine.location || '';
+    document.getElementById('tastingCompanions').value = wine.companions || '';
+    document.getElementById('tastingPairing').value = wine.pairing || '';
+    document.getElementById('tastingOccasion').value = wine.occasion || '';
+    document.getElementById('wineNotes').value = wine.notes || '';
+
+    setPhotoPreview('label', wine.labelPhoto || '');
+    setPhotoPreview('memory', wine.memoryPhoto || '');
+  } else {
+    document.getElementById('formModalEyebrow').textContent = 'Simples & Didático';
+    document.getElementById('formModalTitle').textContent = 'Avaliar Vinho Tomado & Lembrança';
+    document.getElementById('wineId').value = '';
+    state.editingCreatedAt = null;
+    document.getElementById('tastingDate').value = new Date().toISOString().slice(0, 10);
+    document.getElementById('wineRating').value = 4.5;
+    updateStarPickerUI(4.5);
+    setPhotoPreview('label', '');
+    setPhotoPreview('memory', '');
+  }
+
+  updateSensoryLabelsUI();
+  modal.classList.remove('hidden');
+}
+
+function setPhotoPreview(kind, dataUrl) {
+  if (kind === 'label') {
+    state.currentLabelPhoto = dataUrl || '';
+    const previewContainer = document.getElementById('previewLabelContainer');
+    const placeholder = document.getElementById('placeholderLabel');
+    const img = document.getElementById('previewLabelImg');
+    if (dataUrl) {
+      img.src = dataUrl;
+      previewContainer.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+    } else {
+      img.src = '';
+      previewContainer.classList.add('hidden');
+      placeholder.classList.remove('hidden');
+    }
+  } else if (kind === 'memory') {
+    state.currentMemoryPhoto = dataUrl || '';
+    const previewContainer = document.getElementById('previewMemoryContainer');
+    const placeholder = document.getElementById('placeholderMemory');
+    const img = document.getElementById('previewMemoryImg');
+    if (dataUrl) {
+      img.src = dataUrl;
+      previewContainer.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+    } else {
+      img.src = '';
+      previewContainer.classList.add('hidden');
+      placeholder.classList.remove('hidden');
+    }
+  } else if (kind === 'cellarLabel') {
+    state.currentCellarLabelPhoto = dataUrl || '';
+    const previewContainer = document.getElementById('previewCellarLabelContainer');
+    const placeholder = document.getElementById('placeholderCellarLabel');
+    const img = document.getElementById('previewCellarLabelImg');
+    if (dataUrl) {
+      img.src = dataUrl;
+      previewContainer.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+    } else {
+      img.src = '';
+      previewContainer.classList.add('hidden');
+      placeholder.classList.remove('hidden');
+    }
+  }
+}
+
+function updateSensoryLabelsUI() {
+  const b = Number(document.getElementById('sensoryBody').value);
+  const t = Number(document.getElementById('sensoryTannin').value);
+  const a = Number(document.getElementById('sensoryAcidity').value);
+  const s = Number(document.getElementById('sensorySweetness').value);
+
+  document.getElementById('labelBody').textContent = `${SENSORY_LABELS.body[b - 1]} (${b}/5)`;
+  document.getElementById('labelTannin').textContent = `${SENSORY_LABELS.tannin[t - 1]} (${t}/5)`;
+  document.getElementById('labelAcidity').textContent = `${SENSORY_LABELS.acidity[a - 1]} (${a}/5)`;
+  document.getElementById('labelSweetness').textContent = `${SENSORY_LABELS.sweetness[s - 1]} (${s}/5)`;
+}
+
+function updateStarPickerUI(val) {
+  const num = Number(val);
+  document.getElementById('ratingNumberDisplay').textContent = num.toFixed(1);
+  document.querySelectorAll('#starPicker .star-btn').forEach((btn) => {
+    const starVal = Number(btn.dataset.star);
+    if (starVal <= Math.round(num)) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+/* ==========================================
+   EVENT BINDINGS
+========================================== */
+function bindEvents() {
+  document.querySelectorAll('.nav-tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      switchToView(tab.dataset.view);
+    });
+  });
+
+  // Open Tasted Wine Form
+  document.getElementById('btnNewWine').addEventListener('click', () => openWineFormModal(null));
+  document.getElementById('btnEmptyAdd').addEventListener('click', () => openWineFormModal(null));
+  document.getElementById('btnEmptyGoCellar').addEventListener('click', () => switchToView('cellar'));
+
+  // Open Cellar Wine Form
+  document.getElementById('btnOpenCellarFormTop').addEventListener('click', () => openCellarFormModal(null));
+  document.getElementById('btnAddCellarWine').addEventListener('click', () => openCellarFormModal(null));
+  document.getElementById('btnCellarEmptyAdd').addEventListener('click', () => openCellarFormModal(null));
+
+  document.getElementById('btnCloseCellarModal').addEventListener('click', () => {
+    document.getElementById('cellarFormModal').classList.add('hidden');
+  });
+  document.getElementById('btnCancelCellarForm').addEventListener('click', () => {
+    document.getElementById('cellarFormModal').classList.add('hidden');
+  });
+
+  // Load Sample Wines
+  const handleLoadSamples = async () => {
+    const samples = window.getSampleWines();
+    await window.wineDB.importMany(samples);
+    state.wines = await window.wineDB.getAllWines();
+    refreshAllUI();
+    document.getElementById('backupModal').classList.add('hidden');
+    showToast('Exemplos restaurados nos Tomados e na Adega Virtual!');
+  };
+  document.getElementById('btnLoadSamplesFromBackup').addEventListener('click', handleLoadSamples);
+
+  document.getElementById('btnCloseFormModal').addEventListener('click', () => {
+    document.getElementById('wineFormModal').classList.add('hidden');
+  });
+  document.getElementById('btnCancelForm').addEventListener('click', () => {
+    document.getElementById('wineFormModal').classList.add('hidden');
+  });
+
+  // Photo Uploaders (Tasted Modal)
+  const inputLabel = document.getElementById('inputLabelPhoto');
+  const dropzoneLabel = document.getElementById('dropzoneLabel');
+  dropzoneLabel.addEventListener('click', (e) => {
+    if (e.target.id === 'btnRemoveLabelPhoto') return;
+    inputLabel.click();
+  });
+  inputLabel.addEventListener('change', async (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const compressed = await window.compressImageFile(e.target.files[0]);
+      setPhotoPreview('label', compressed);
+    }
+  });
+  document.getElementById('btnRemoveLabelPhoto').addEventListener('click', (e) => {
+    e.stopPropagation();
+    inputLabel.value = '';
+    setPhotoPreview('label', '');
+  });
+
+  const inputMemory = document.getElementById('inputMemoryPhoto');
+  const dropzoneMemory = document.getElementById('dropzoneMemory');
+  dropzoneMemory.addEventListener('click', (e) => {
+    if (e.target.id === 'btnRemoveMemoryPhoto') return;
+    inputMemory.click();
+  });
+  inputMemory.addEventListener('change', async (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const compressed = await window.compressImageFile(e.target.files[0]);
+      setPhotoPreview('memory', compressed);
+    }
+  });
+  document.getElementById('btnRemoveMemoryPhoto').addEventListener('click', (e) => {
+    e.stopPropagation();
+    inputMemory.value = '';
+    setPhotoPreview('memory', '');
+  });
+
+  // Photo Uploader (Cellar Modal)
+  const inputCellarLabel = document.getElementById('inputCellarLabelPhoto');
+  const dropzoneCellarLabel = document.getElementById('dropzoneCellarLabel');
+  dropzoneCellarLabel.addEventListener('click', (e) => {
+    if (e.target.id === 'btnRemoveCellarLabelPhoto') return;
+    inputCellarLabel.click();
+  });
+  inputCellarLabel.addEventListener('change', async (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const compressed = await window.compressImageFile(e.target.files[0]);
+      setPhotoPreview('cellarLabel', compressed);
+    }
+  });
+  document.getElementById('btnRemoveCellarLabelPhoto').addEventListener('click', (e) => {
+    e.stopPropagation();
+    inputCellarLabel.value = '';
+    setPhotoPreview('cellarLabel', '');
+  });
+
+  // Save Cellar Form Submit (Guardar na Adega Virtual)
+  document.getElementById('cellarForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const cellarRecord = {
+      id: document.getElementById('cellarWineId').value || undefined,
+      createdAt: state.editingCreatedAt || undefined,
+      status: 'cellar',
+      name: document.getElementById('cellarWineName').value.trim(),
+      type: document.getElementById('cellarWineType').value,
+      grapes: document.getElementById('cellarWineGrapes').value.trim(),
+      country: document.getElementById('cellarWineCountry').value.trim(),
+      vintage: document.getElementById('cellarWineVintage').value.trim(),
+      quantity: Math.max(1, Number(document.getElementById('cellarWineQty').value) || 1),
+      cellarObs: document.getElementById('cellarWineObs').value.trim(),
+      labelPhoto: state.currentCellarLabelPhoto
+    };
+
+    await window.wineDB.saveWine(cellarRecord);
+    state.wines = await window.wineDB.getAllWines();
+    document.getElementById('cellarFormModal').classList.add('hidden');
+    switchToView('cellar');
+    refreshAllUI();
+    showToast(`🏠 "${cellarRecord.name}" guardado na sua Adega Virtual!`);
+  });
+
+  // Sensory Sliders
+  ['sensoryBody', 'sensoryTannin', 'sensoryAcidity', 'sensorySweetness'].forEach((id) => {
+    document.getElementById(id).addEventListener('input', updateSensoryLabelsUI);
+  });
+
+  // Star Rating Picker
+  document.querySelectorAll('#starPicker .star-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const val = Number(btn.dataset.star);
+      document.getElementById('wineRating').value = val;
+      updateStarPickerUI(val);
+    });
+  });
+  document.getElementById('wineRating').addEventListener('input', (e) => {
+    updateStarPickerUI(e.target.value);
+  });
+
+  // Save Tasted Wine Form Submit (Avaliação + Integração com Adega Virtual)
+  document.getElementById('wineForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const rawScore10 = document.getElementById('wineScore10').value;
+    const score10 = rawScore10 !== '' ? Math.min(10, Math.max(0, Number(rawScore10))) : null;
+    const fromCellarId = document.getElementById('fromCellarWineId').value;
+
+    const wineRecord = {
+      id: document.getElementById('wineId').value || undefined,
+      createdAt: state.editingCreatedAt || undefined,
+      status: 'tasted',
+      name: document.getElementById('wineName').value.trim(),
+      type: document.getElementById('wineType').value,
+      vintage: document.getElementById('wineVintage').value.trim(),
+      grapes: document.getElementById('wineGrapes').value.trim(),
+      country: document.getElementById('wineCountry').value.trim(),
+      sensory: {
+        body: Number(document.getElementById('sensoryBody').value),
+        tannin: Number(document.getElementById('sensoryTannin').value),
+        acidity: Number(document.getElementById('sensoryAcidity').value),
+        sweetness: Number(document.getElementById('sensorySweetness').value)
+      },
+      rating: Number(document.getElementById('wineRating').value),
+      score10,
+      rebuy: document.getElementById('wineRebuy').checked,
+      tastingDate: document.getElementById('tastingDate').value,
+      location: document.getElementById('tastingLocation').value.trim(),
+      companions: document.getElementById('tastingCompanions').value.trim(),
+      pairing: document.getElementById('tastingPairing').value.trim(),
+      occasion: document.getElementById('tastingOccasion').value.trim(),
+      notes: document.getElementById('wineNotes').value.trim(),
+      labelPhoto: state.currentLabelPhoto,
+      memoryPhoto: state.currentMemoryPhoto
+    };
+
+    // Se veio da Adega Virtual, dá baixa automática na garrafa da Adega!
+    if (fromCellarId) {
+      const cellarOrigin = state.wines.find((w) => w.id === fromCellarId);
+      if (cellarOrigin) {
+        const currentQty = Number(cellarOrigin.quantity) || 1;
+        if (currentQty > 1) {
+          cellarOrigin.quantity = currentQty - 1;
+          await window.wineDB.saveWine(cellarOrigin);
+        } else {
+          await window.wineDB.deleteWine(fromCellarId);
+        }
+      }
+    }
+
+    await window.wineDB.saveWine(wineRecord);
+    state.wines = await window.wineDB.getAllWines();
+    document.getElementById('wineFormModal').classList.add('hidden');
+    switchToView('catalog');
+    refreshAllUI();
+    showToast(
+      fromCellarId
+        ? `🍷 "${wineRecord.name}" avaliado e atualizado na sua Adega!`
+        : `🍷 "${wineRecord.name}" salvo nas suas avaliações!`
+    );
+  });
+
+  // Search & Filters (Tasted Catalog)
+  const searchInput = document.getElementById('searchInput');
+  const clearBtn = document.getElementById('btnClearSearch');
+  searchInput.addEventListener('input', (e) => {
+    state.searchQuery = e.target.value;
+    clearBtn.classList.toggle('hidden', !state.searchQuery);
+    renderCatalog();
+  });
+  clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    state.searchQuery = '';
+    clearBtn.classList.add('hidden');
+    renderCatalog();
+  });
+
+  document.querySelectorAll('#typeFilterPills .pill').forEach((pill) => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('#typeFilterPills .pill').forEach((p) => p.classList.remove('active'));
+      pill.classList.add('active');
+      state.filterType = pill.dataset.type;
+      renderCatalog();
+    });
+  });
+
+  document.getElementById('filterRating').addEventListener('change', (e) => {
+    state.filterRating = Number(e.target.value);
+    renderCatalog();
+  });
+
+  document.getElementById('filterRebuy').addEventListener('change', (e) => {
+    state.filterRebuy = e.target.value;
+    renderCatalog();
+  });
+
+  document.getElementById('sortOrder').addEventListener('change', (e) => {
+    state.sortOrder = e.target.value;
+    renderCatalog();
+  });
+
+  // Search & Filters (Adega Virtual)
+  document.getElementById('cellarSearchInput').addEventListener('input', (e) => {
+    state.cellarSearchQuery = e.target.value;
+    renderCellarView();
+  });
+
+  document.querySelectorAll('#cellarTypePills .pill').forEach((pill) => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('#cellarTypePills .pill').forEach((p) => p.classList.remove('active'));
+      pill.classList.add('active');
+      state.cellarFilterType = pill.dataset.type;
+      renderCellarView();
+    });
+  });
+
+  // Backup Modal
+  const backupModal = document.getElementById('backupModal');
+  document.getElementById('btnBackupMenu').addEventListener('click', () => {
+    backupModal.classList.remove('hidden');
+  });
+  document.getElementById('btnCloseBackupModal').addEventListener('click', () => {
+    backupModal.classList.add('hidden');
+  });
+
+  // Cloud Database Modal
+  const cloudModal = document.getElementById('cloudModal');
+  const openCloudModal = () => {
+    const cfg = window.wineDB.cloud.loadConfig();
+    document.getElementById('cloudProvider').value = cfg.provider || 'supabase';
+    document.getElementById('cloudCellarId').value = cfg.cellarId || 'minha-adega-principal';
+    document.getElementById('cloudUrl').value = cfg.url || '';
+    document.getElementById('cloudApiKey').value = cfg.apiKey || '';
+    cloudModal.classList.remove('hidden');
+  };
+
+  document.getElementById('btnCloudConfig').addEventListener('click', openCloudModal);
+  document.getElementById('btnCloseCloudModal').addEventListener('click', () => {
+    cloudModal.classList.add('hidden');
+  });
+
+  const btnCopySql = document.getElementById('btnCopySupabaseSql');
+  if (btnCopySql) {
+    btnCopySql.addEventListener('click', async () => {
+      const sqlScript = `create table if not exists public.wines (
+  id text primary key,
+  cellar_id text not null default 'minha-adega-principal',
+  name text not null,
+  type text,
+  grapes text,
+  country text,
+  vintage text,
+  rating numeric(3,1),
+  score10 numeric(3,1),
+  tasting_date text,
+  payload jsonb not null,
+  updated_at timestamptz not null default now()
+);
+create index if not exists idx_wines_cellar_id on public.wines (cellar_id);
+alter table public.wines enable row level security;
+drop policy if exists "Acesso total aos rótulos da adega" on public.wines;
+create policy "Acesso total aos rótulos da adega" on public.wines for all to anon, authenticated using (true) with check (true);`;
+
+      try {
+        await navigator.clipboard.writeText(sqlScript);
+        showToast('📋 Comando SQL copiado! Cole no SQL Editor do Supabase e clique em Run.');
+      } catch (e) {
+        prompt('Copie o código SQL abaixo e cole no SQL Editor do Supabase:', sqlScript);
+      }
+    });
+  }
+
+  document.getElementById('cloudProvider').addEventListener('change', (e) => {
+    const hint = document.getElementById('cloudUrlHint');
+    if (e.target.value === 'supabase') {
+      hint.textContent = 'Encontrada em Project Settings → Data API → Project URL';
+    } else {
+      hint.textContent = 'Ex: https://seu-projeto-default-rtdb.firebaseio.com';
+    }
+  });
+
+  document.getElementById('cloudConfigForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    window.wineDB.cloud.saveConfig({
+      provider: document.getElementById('cloudProvider').value,
+      cellarId: document.getElementById('cloudCellarId').value,
+      url: document.getElementById('cloudUrl').value,
+      apiKey: document.getElementById('cloudApiKey').value
+    });
+
+    showToast('Conectando e sincronizando com o Supabase...');
+    const pushed = await window.wineDB.cloud.pushAllToCloud(state.wines);
+    state.wines = await window.wineDB.getAllWines();
+    refreshAllUI();
+
+    if (pushed) {
+      cloudModal.classList.add('hidden');
+      showToast('⚡ Supabase conectado! Todos os seus vinhos e adega estão salvos na nuvem.');
+    } else {
+      showToast('⚠️ Verifique se executou o SQL no Supabase e se a URL e a API Key estão corretas.');
+    }
+  });
+
+  document.getElementById('btnSyncNow').addEventListener('click', async () => {
+    if (!window.wineDB.cloud.isConfigured()) {
+      showToast('Preencha a URL e a API Key do Supabase primeiro.');
+      return;
+    }
+    await window.wineDB.cloud.pushAllToCloud(state.wines);
+    state.wines = await window.wineDB.getAllWines();
+    refreshAllUI();
+    showToast('🔄 Sincronização com o Supabase concluída!');
+  });
+
+  document.getElementById('btnDisconnectCloud').addEventListener('click', () => {
+    window.wineDB.cloud.saveConfig({ provider: 'supabase', url: '', apiKey: '', cellarId: 'minha-adega-principal' });
+    cloudModal.classList.add('hidden');
+    showToast('Nuvem desconectada. Seus vinhos continuam salvos localmente no aparelho.');
+  });
+
+  document.getElementById('btnExportJson').addEventListener('click', () => {
+    const dataStr = JSON.stringify(
+      {
+        app: 'VinoMemo',
+        exportedAt: new Date().toISOString(),
+        wines: state.wines
+      },
+      null,
+      2
+    );
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `vinomemo-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Backup exportado com sucesso!');
+  });
+
+  document.getElementById('inputImportJson').addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      const list = Array.isArray(parsed) ? parsed : parsed.wines;
+      if (!Array.isArray(list)) throw new Error('Formato inválido');
+      const count = await window.wineDB.importMany(list);
+      state.wines = await window.wineDB.getAllWines();
+      refreshAllUI();
+      backupModal.classList.add('hidden');
+      showToast(`${count} registro(s) importado(s) com sucesso!`);
+    } catch (err) {
+      alert('Não foi possível ler o arquivo de backup. Verifique se é um JSON válido do VinoMemo.');
+    }
+    e.target.value = '';
+  });
+
+  ['wineFormModal', 'cellarFormModal', 'wineDetailModal', 'backupModal', 'cloudModal'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('click', (e) => {
+        if (e.target === el) el.classList.add('hidden');
+      });
+    }
+  });
+}
+
+/* ==========================================
+   THEME & UTILITIES
+========================================== */
+function initTheme() {
+  const saved = localStorage.getItem('vinomemo_theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+
+  document.getElementById('btnThemeToggle').addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('vinomemo_theme', next);
+    showToast(next === 'dark' ? 'Modo Escuro ativado' : 'Modo Claro ativado');
+  });
+}
+
+function showToast(message) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.remove();
+  }, 3800);
+}
+
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+</script>
+  <script>
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

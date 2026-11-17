@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VinoMemo — Diário de Rótulos, Adega & Memórias</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <meta name="theme-color" content="#6B1D2F" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="VinoMemo" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Top Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-emblem" aria-hidden="true">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 5H25L23.8 15.2C23.4 18.8 20.9 21.6 18 21.6C15.1 21.6 12.6 18.8 12.2 15.2L11 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 13.5C14.5 14.8 16.5 12.5 19 13.5C21 14.3 22.5 13.8 23.8 13.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M18 21.6V30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M13 30H23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">VinoMemo</h1>
+          <p class="brand-subtitle">Seu Diário Simples de Vinhos, Adega &amp; Lembranças</p>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Navegação Principal">
+        <button class="nav-tab active" data-view="catalog">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 2h8l-1 9a4 4 0 0 1-6 0L8 2z"/>
+            <line x1="12" y1="14" x2="12" y2="21"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+          </svg>
+          <span>Tomados</span>
+        </button>
+        <button class="nav-tab" data-view="cellar">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z"/>
+            <path d="M9 21V12h6v9"/>
+          </svg>
+          <span>Adega Virtual</span>
+          <span class="nav-badge" id="navCellarBadge">0</span>
+        </button>
+        <button class="nav-tab" data-view="memories">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <span>Lembranças</span>
+        </button>
+        <button class="nav-tab" data-view="stats">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 20V10M12 20V4M6 20v-6"/>
+          </svg>
+          <span>Meu Paladar</span>
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <button id="btnCloudConfig" class="cloud-status-btn unconfigured" title="Configurar Banco de Dados na Nuvem">
+          <span class="cloud-dot"></span>
+          <span id="cloudStatusLabel">☁️ Conectar Nuvem</span>
+        </button>
+        <button id="btnThemeToggle" class="icon-btn" title="Alternar Modo Escuro / Claro" aria-label="Alternar tema">
+          <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <button id="btnBackupMenu" class="icon-btn" title="Exportar / Importar Backup" aria-label="Backup de dados">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+        </button>
+        <button id="btnOpenCellarFormTop" class="btn-secondary" title="Guardar vinho que tenho em casa">
+          <span>🏠 + Adega</span>
+        </button>
+        <button id="btnNewWine" class="btn-primary">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.3">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>Avaliar Tomado</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Summary Ribbon -->
+  <section class="summary-ribbon" id="summaryRibbon">
+    <div class="ribbon-inner">
+      <div class="ribbon-stat">
+        <span class="ribbon-value" id="quickTotalWines">0</span>
+        <span class="ribbon-label">Rótulos Tomados</span>
+      </div>
+      <div class="ribbon-divider"></div>
+      <div class="ribbon-stat">
+        <span class="ribbon-value" id="quickCellarCount">0</span>
+        <span class="ribbon-label">Garrafas na Adega</span>
+      </div>
+      <div class="ribbon-divider"></div>
+      <div class="ribbon-stat">
+        <span class="ribbon-value" id="quickAvgRating">0.0 ★</span>
+        <span class="ribbon-label">Média de Estrelas</span>
+      </div>
+      <div class="ribbon-divider"></div>
+      <div class="ribbon-stat">
+        <span class="ribbon-value" id="quickTopGrape">—</span>
+        <span class="ribbon-label">Uva Favorita</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+    <!-- VIEW 1: CATALOG (TASTED WINES) -->
+    <section id="viewCatalog" class="view-section active">
+      <!-- Filter & Search Bar -->
+      <div class="filter-bar">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="searchInput" placeholder="Buscar nos vinhos tomados por nome, uva, país, local ou companhia..." />
+          <button id="btnClearSearch" class="clear-search-btn hidden" title="Limpar busca">&times;</button>
+        </div>
+
+        <div class="filter-controls">
+          <div class="type-pills" id="typeFilterPills">
+            <button class="pill active" data-type="all">Todos</button>
+            <button class="pill" data-type="Tinto"><span class="dot dot-tinto"></span>Tinto</button>
+            <button class="pill" data-type="Branco"><span class="dot dot-branco"></span>Branco</button>
+            <button class="pill" data-type="Rosé"><span class="dot dot-rose"></span>Rosé</button>
+            <button class="pill" data-type="Espumante"><span class="dot dot-espumante"></span>Espumante</button>
+            <button class="pill" data-type="Sobremesa/Fortificado"><span class="dot dot-fortificado"></span>Licoroso/Doce</button>
+          </div>
+
+          <div class="select-filters">
+            <select id="filterRating" aria-label="Filtrar por estrelas">
+              <option value="0">Todas as estrelas</option>
+              <option value="4.5">4.5★ ou mais</option>
+              <option value="4">4.0★ ou mais</option>
+              <option value="3">3.0★ ou mais</option>
+            </select>
+
+            <select id="filterRebuy" aria-label="Filtrar favoritos">
+              <option value="all">Todos os rótulos</option>
+              <option value="yes">♥ Compraria novamente</option>
+              <option value="withMoment">📸 Com foto do dia</option>
+            </select>
+
+            <select id="sortOrder" aria-label="Ordenar por">
+              <option value="date_desc">Mais recentes</option>
+              <option value="date_asc">Mais antigos</option>
+              <option value="rating_desc">Maior avaliação (★)</option>
+              <option value="score_desc">Maior nota (0–10)</option>
+              <option value="name_asc">Nome (A–Z)</option>
+              <option value="vintage_desc">Ano mais recente</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wine Cards Grid -->
+      <div id="wineGrid" class="wine-grid"></div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-illustration">
+          <svg viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M20 8h24l-2 20c-.8 7.5-5.5 13-10 13s-9.2-5.5-10-13L20 8z"/>
+            <path d="M21.5 24c5 2.5 9-1.5 14 .5 3.5 1.3 6 .5 7-.5"/>
+            <path d="M32 41v15M22 56h20"/>
+          </svg>
+        </div>
+        <h2 id="emptyStateTitle">Nenhum vinho avaliado ainda</h2>
+        <p id="emptyStateDesc">Avalie um vinho que você tomou ou escolha uma garrafa da sua Adega Virtual para abrir e avaliar!</p>
+        <div class="empty-actions">
+          <button id="btnEmptyAdd" class="btn-primary">Avaliar Vinho Tomado</button>
+          <button id="btnEmptyGoCellar" class="btn-secondary">🏠 Ir para Minha Adega Virtual</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: ADEGA VIRTUAL (CELLAR) -->
+    <section id="viewCellar" class="view-section">
+      <div class="cellar-banner">
+        <div>
+          <span class="modal-eyebrow">Estoque da Sua Casa</span>
+          <h2 class="section-title">🏠 Minha Adega Virtual</h2>
+          <p class="section-subtitle">Cadastre os vinhos que você tem guardados em casa. Quando abrir uma garrafa, basta clicar em <strong>"🍷 Tomei! Avaliar"</strong> para transferir para as suas avaliações já com todos os dados preenchidos!</p>
+        </div>
+        <button id="btnAddCellarWine" class="btn-primary">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.3">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>Guardar Vinho na Adega</span>
+        </button>
+      </div>
+
+      <!-- Mini Dashboard / Resumo da Adega -->
+      <div id="cellarMiniDashboard" class="cellar-mini-dashboard"></div>
+
+      <!-- Cellar Filter Bar -->
+      <div class="filter-bar">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="cellarSearchInput" placeholder="Buscar na sua adega por nome, uva, país ou ano..." />
+        </div>
+        <div class="filter-controls">
+          <div class="type-pills" id="cellarTypePills">
+            <button class="pill active" data-type="all">Todos na Adega</button>
+            <button class="pill" data-type="Tinto"><span class="dot dot-tinto"></span>Tinto</button>
+            <button class="pill" data-type="Branco"><span class="dot dot-branco"></span>Branco</button>
+            <button class="pill" data-type="Rosé"><span class="dot dot-rose"></span>Rosé</button>
+            <button class="pill" data-type="Espumante"><span class="dot dot-espumante"></span>Espumante</button>
+            <button class="pill" data-type="Sobremesa/Fortificado"><span class="dot dot-fortificado"></span>Licoroso/Doce</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="cellarGrid" class="wine-grid"></div>
+
+      <div id="cellarEmptyState" class="empty-state hidden">
+        <div class="empty-illustration">
+          <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z"/>
+            <path d="M9 21V12h6v9"/>
+          </svg>
+        </div>
+        <h2>Sua Adega Virtual está vazia</h2>
+        <p>Adicione aqui os vinhos que você tem guardados em casa (nome, tipo, uva, país e ano). Assim você sempre sabe o que tem disponível e pode avaliá-los com 1 clique quando tomar!</p>
+        <div class="empty-actions">
+          <button id="btnCellarEmptyAdd" class="btn-primary">+ Guardar Primeiro Vinho na Adega</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: MEMORIES POLAROID WALL -->
+    <section id="viewMemories" class="view-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Mural de Lembranças &amp; Momentos</h2>
+          <p class="section-subtitle">Reveja as fotos do dia, os lugares e as pessoas especiais que compartilharam cada garrafa com você.</p>
+        </div>
+      </div>
+      <div id="memoriesGrid" class="memories-grid"></div>
+    </section>
+
+    <!-- VIEW 4: STATISTICS & PALATE PROFILE -->
+    <section id="viewStats" class="view-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Meu Gosto &amp; Resumo</h2>
+          <p class="section-subtitle">Veja de um jeito fácil quais tipos de vinho, uvas e países mais agradam o seu paladar.</p>
+        </div>
+      </div>
+      <div id="statsContent" class="stats-dashboard"></div>
+    </section>
+  </main>
+
+  <!-- MODAL: ADD / EDIT CELLAR WINE (ADEGA VIRTUAL - RÁPIDO E DIRETO) -->
+  <div id="cellarFormModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="cellarModalTitle">
+    <div class="modal-container modal-large" style="max-width: 640px;">
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow" id="cellarModalEyebrow">🏠 Minha Adega em Casa</span>
+          <h2 id="cellarModalTitle">Guardar Vinho na Adega Virtual</h2>
+        </div>
+        <button type="button" class="modal-close" id="btnCloseCellarModal" aria-label="Fechar">&times;</button>
+      </div>
+
+      <form id="cellarForm" class="wine-form">
+        <input type="hidden" id="cellarWineId" />
+
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <span class="step-badge">1</span> Dados da Garrafa
+          </h3>
+
+          <div class="form-group" style="margin-bottom: 0.9rem;">
+            <label for="cellarWineName">🍾 Nome do Vinho *</label>
+            <input type="text" id="cellarWineName" required placeholder="Cole ou digite o nome do vinho (Ex: Concha y Toro Reservado)" />
+          </div>
+
+          <div class="form-grid-2" style="margin-bottom: 0.9rem;">
+            <div class="form-group">
+              <label for="cellarWineType">🍷 Tipo do Vinho *</label>
+              <select id="cellarWineType" required>
+                <option value="Tinto">🍷 Vinho Tinto</option>
+                <option value="Branco">🥂 Vinho Branco</option>
+                <option value="Rosé">🌸 Vinho Rosé</option>
+                <option value="Espumante">🍾 Espumante / Frisante</option>
+                <option value="Sobremesa/Fortificado">🍯 Licoroso / Sobremesa</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="cellarWineGrapes">🍇 Tipo da Uva *</label>
+              <input type="text" id="cellarWineGrapes" required placeholder="Ex: Cabernet Sauvignon, Malbec, Carménère..." list="grapeSuggestions" />
+            </div>
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="cellarWineCountry">🌍 País *</label>
+              <input type="text" id="cellarWineCountry" required placeholder="Ex: Chile, Argentina, Portugal..." list="countrySuggestions" />
+            </div>
+
+            <div class="form-group">
+              <label for="cellarWineVintage">📅 Ano (Safra)</label>
+              <input type="text" id="cellarWineVintage" placeholder="Ex: 2022" maxlength="10" />
+            </div>
+
+            <div class="form-group">
+              <label for="cellarWineQty">🔢 Quantidade em Casa</label>
+              <input type="number" id="cellarWineQty" min="1" max="99" value="1" required />
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 0.9rem;">
+            <label for="cellarWineObs">📝 Observação rápida (Opcional)</label>
+            <input type="text" id="cellarWineObs" placeholder="Ex: Ganhei de presente, guardar para jantar especial, adega climatizada..." />
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <span class="step-badge">2</span> Foto do Rótulo (Opcional)
+          </h3>
+          <div class="photo-dropzone" id="dropzoneCellarLabel" style="height: 155px;">
+            <input type="file" id="inputCellarLabelPhoto" accept="image/*" class="file-input-hidden" />
+            <div id="previewCellarLabelContainer" class="photo-preview-container hidden">
+              <img id="previewCellarLabelImg" src="" alt="Prévia do Rótulo" />
+              <button type="button" id="btnRemoveCellarLabelPhoto" class="remove-photo-btn" title="Remover foto">&times;</button>
+            </div>
+            <div id="placeholderCellarLabel" class="photo-placeholder">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+              </svg>
+              <span>Toque se quiser tirar foto da garrafa agora</span>
+              <small>Se deixar sem foto, geramos um rótulo ilustrado automático</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="btnCancelCellarForm">Cancelar</button>
+          <button type="submit" class="btn-primary">🏠 Guardar na Minha Adega</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT TASTED WINE (AVALIAÇÃO E MEMÓRIA) -->
+  <div id="wineFormModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="formModalTitle">
+    <div class="modal-container modal-large">
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow" id="formModalEyebrow">Simples &amp; Didático</span>
+          <h2 id="formModalTitle">Salvar Rótulo &amp; Lembrança</h2>
+        </div>
+        <button type="button" class="modal-close" id="btnCloseFormModal" aria-label="Fechar">&times;</button>
+      </div>
+
+      <form id="wineForm" class="wine-form">
+        <input type="hidden" id="wineId" />
+        <input type="hidden" id="fromCellarWineId" />
+
+        <!-- Banner quando vem da Adega Virtual -->
+        <div id="fromCellarBanner" class="from-cellar-alert hidden">
+          <span>🍷 <strong>Abrindo garrafa da sua Adega Virtual!</strong> Os dados do vinho já foram preenchidos automaticamente. Agora é só colocar a foto do momento e a sua avaliação!</span>
+        </div>
+
+        <!-- SECTION 1: PHOTOS (Label + Memory of the Day) -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <span class="step-badge">1</span> Fotos para Recordação
+          </h3>
+          <div class="photo-uploaders-grid">
+            <!-- Label Photo -->
+            <div class="photo-upload-card">
+              <div class="photo-card-header">
+                <strong>🍾 Foto do Rótulo</strong>
+                <span>Para você lembrar qual foi a garrafa</span>
+              </div>
+              <div class="photo-dropzone" id="dropzoneLabel">
+                <input type="file" id="inputLabelPhoto" accept="image/*" class="file-input-hidden" />
+                <div id="previewLabelContainer" class="photo-preview-container hidden">
+                  <img id="previewLabelImg" src="" alt="Prévia do Rótulo" />
+                  <button type="button" id="btnRemoveLabelPhoto" class="remove-photo-btn" title="Remover foto">&times;</button>
+                </div>
+                <div id="placeholderLabel" class="photo-placeholder">
+                  <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                  </svg>
+                  <span>Toque para enviar ou tirar foto do <strong>Rótulo</strong></span>
+                  <small>Opcional (se não tiver, criamos uma capa bonita)</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Memory Photo -->
+            <div class="photo-upload-card memory-highlight">
+              <div class="photo-card-header">
+                <strong>📸 Foto do Dia (Lembrança)</strong>
+                <span>Quem estava junto, o prato ou o lugar</span>
+              </div>
+              <div class="photo-dropzone" id="dropzoneMemory">
+                <input type="file" id="inputMemoryPhoto" accept="image/*" class="file-input-hidden" />
+                <div id="previewMemoryContainer" class="photo-preview-container hidden">
+                  <img id="previewMemoryImg" src="" alt="Prévia da Lembrança" />
+                  <button type="button" id="btnRemoveMemoryPhoto" class="remove-photo-btn" title="Remover foto">&times;</button>
+                </div>
+                <div id="placeholderMemory" class="photo-placeholder">
+                  <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <path d="M21 15l-5-5L5 21"/>
+                  </svg>
+                  <span>Toque para guardar a <strong>Foto do Momento</strong></span>
+                  <small>Vai aparecer também no seu Mural de Lembranças</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: INFORMAÇÕES BÁSICAS DO VINHO -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <span class="step-badge">2</span> Informações Básicas do Vinho
+          </h3>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="wineName">Nome do Vinho (como está no rótulo) *</label>
+              <input type="text" id="wineName" required placeholder="Ex: Casillero del Diablo, Pêra-Manca..." />
+            </div>
+
+            <div class="form-group">
+              <label for="wineType">Tipo do Vinho *</label>
+              <select id="wineType" required>
+                <option value="Tinto">🍷 Vinho Tinto</option>
+                <option value="Branco">🥂 Vinho Branco</option>
+                <option value="Rosé">🌸 Vinho Rosé</option>
+                <option value="Espumante">🍾 Espumante / Frisante</option>
+                <option value="Sobremesa/Fortificado">🍯 Licoroso / Sobremesa (Porto, etc.)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-3" style="margin-top: 0.9rem;">
+            <div class="form-group">
+              <label for="wineGrapes">🍇 Tipo de Uva</label>
+              <input type="text" id="wineGrapes" placeholder="Ex: Malbec, Carménère, Merlot..." list="grapeSuggestions" />
+              <small class="field-hint">A uva principal escrita na garrafa</small>
+              <datalist id="grapeSuggestions">
+                <option value="Malbec"></option>
+                <option value="Cabernet Sauvignon"></option>
+                <option value="Merlot"></option>
+                <option value="Pinot Noir"></option>
+                <option value="Syrah"></option>
+                <option value="Carménère"></option>
+                <option value="Tempranillo"></option>
+                <option value="Tannat"></option>
+                <option value="Chardonnay"></option>
+                <option value="Sauvignon Blanc"></option>
+                <option value="Blend / Corte (Várias uvas)"></option>
+              </datalist>
+            </div>
+
+            <div class="form-group">
+              <label for="wineCountry">🌍 País</label>
+              <input type="text" id="wineCountry" placeholder="Ex: Chile, Argentina, Portugal..." list="countrySuggestions" />
+              <small class="field-hint">De onde veio o vinho</small>
+              <datalist id="countrySuggestions">
+                <option value="Chile"></option>
+                <option value="Argentina"></option>
+                <option value="Portugal"></option>
+                <option value="Brasil"></option>
+                <option value="Itália"></option>
+                <option value="França"></option>
+                <option value="Espanha"></option>
+                <option value="Uruguai"></option>
+              </datalist>
+            </div>
+
+            <div class="form-group">
+              <label for="wineVintage">📅 Ano (Safra)</label>
+              <input type="text" id="wineVintage" placeholder="Ex: 2022" maxlength="10" />
+              <small class="field-hint">Ano de colheita impresso no rótulo</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: COMO ELE É NA BOCA? (DIDÁTICO) -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <span class="step-badge">3</span> Como você sentiu o vinho? (Guia Didático)
+          </h3>
+          <p class="section-helper-text">Arraste as barrinhas conforme o que você sentiu ao beber. Não existe resposta certa ou errada, é a sua percepção!</p>
+
+          <div class="sensory-sliders-grid">
+            <div class="sensory-slider-item">
+              <div class="sensory-slider-header">
+                <label for="sensoryBody">💧 Peso na Boca (Corpo)</label>
+                <span class="sensory-val-label" id="labelBody">Médio (3/5)</span>
+              </div>
+              <p class="didactic-tip">O vinho parece levinho como água ou mais denso e encorpado na boca?</p>
+              <input type="range" id="sensoryBody" min="1" max="5" step="1" value="3" />
+              <div class="sensory-scale-ends">
+                <span>1 • Bem Leve</span>
+                <span>5 • Bem Encorpado</span>
+              </div>
+            </div>
+
+            <div class="sensory-slider-item">
+              <div class="sensory-slider-header">
+                <label for="sensoryTannin">👅 Sensação de "Amarrar" (Tanino)</label>
+                <span class="sensory-val-label" id="labelTannin">Equilibrado (3/5)</span>
+              </div>
+              <p class="didactic-tip">Sabe quando a língua e a gengiva ficam secas (como comer banana verde)? Isso é o tanino!</p>
+              <input type="range" id="sensoryTannin" min="1" max="5" step="1" value="3" />
+              <div class="sensory-scale-ends">
+                <span>1 • Macio (Não amarra)</span>
+                <span>5 • Amarra bastante</span>
+              </div>
+            </div>
+
+            <div class="sensory-slider-item">
+              <div class="sensory-slider-header">
+                <label for="sensoryAcidity">🍋 Refrescância (Acidez)</label>
+                <span class="sensory-val-label" id="labelAcidity">Fresca (3/5)</span>
+              </div>
+              <p class="didactic-tip">Faz a boca salivar nas laterais da língua, dando sensação refrescante?</p>
+              <input type="range" id="sensoryAcidity" min="1" max="5" step="1" value="3" />
+              <div class="sensory-scale-ends">
+                <span>1 • Suave</span>
+                <span>5 • Muito Refrescante</span>
+              </div>
+            </div>
+
+            <div class="sensory-slider-item">
+              <div class="sensory-slider-header">
+                <label for="sensorySweetness">🍯 Doçura</label>
+                <span class="sensory-val-label" id="labelSweetness">Seco (1/5)</span>
+              </div>
+              <p class="didactic-tip">Você sentiu gosto doce na ponta da língua ou ele é totalmente seco (sem açúcar)?</p>
+              <input type="range" id="sensorySweetness" min="1" max="5" step="1" value="1" />
+              <div class="sensory-scale-ends">
+                <span>1 • Seco (Zero doce)</span>
+                <span>5 • Bem Doce / Suave</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 4: SUA NOTA, OPINIÃO E MEMÓRIA DO DIA -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <span class="step-badge">4</span> Sua Nota, Opinião &amp; Lembrança do Dia
+          </h3>
+
+          <div class="rating-row-panel">
+            <div class="star-rating-picker">
+              <label>Avaliação em Estrelas</label>
+              <div class="stars-interactive" id="starPicker">
+                <button type="button" data-star="1" class="star-btn">★</button>
+                <button type="button" data-star="2" class="star-btn">★</button>
+                <button type="button" data-star="3" class="star-btn">★</button>
+                <button type="button" data-star="4" class="star-btn">★</button>
+                <button type="button" data-star="5" class="star-btn">★</button>
+              </div>
+              <div class="rating-fine-tune">
+                <span>Estrelas: <strong id="ratingNumberDisplay">4.5</strong> ★</span>
+                <input type="range" id="wineRating" min="1" max="5" step="0.5" value="4.5" />
+              </div>
+            </div>
+
+            <div class="score-and-rebuy">
+              <div class="form-group">
+                <label for="wineScore10">Sua Nota Pessoal (0 a 10)</label>
+                <input type="number" id="wineScore10" min="0" max="10" step="0.5" placeholder="Ex: 9.0" />
+              </div>
+              <label class="checkbox-card" for="wineRebuy">
+                <input type="checkbox" id="wineRebuy" checked />
+                <span class="checkbox-text">
+                  <strong>♥ Compraria novamente</strong>
+                  <small>Vale a pena repetir esse rótulo</small>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="tastingDate">📅 Data do Momento</label>
+              <input type="date" id="tastingDate" />
+            </div>
+
+            <div class="form-group">
+              <label for="tastingLocation">📍 Onde você tomou?</label>
+              <input type="text" id="tastingLocation" placeholder="Ex: Em casa, Restaurante, Viagem..." />
+            </div>
+
+            <div class="form-group">
+              <label for="tastingCompanions">👥 Com quem estava?</label>
+              <input type="text" id="tastingCompanions" placeholder="Ex: Amor, Família, Amigos..." />
+            </div>
+
+            <div class="form-group span-2">
+              <label for="tastingPairing">🍽️ O que comeu junto? (Opcional)</label>
+              <input type="text" id="tastingPairing" placeholder="Ex: Pizza, churrasco, massa, queijos..." />
+            </div>
+
+            <div class="form-group">
+              <label for="tastingOccasion">🎉 Qual foi a ocasião?</label>
+              <input type="text" id="tastingOccasion" placeholder="Ex: Jantar de sexta, Aniversário..." />
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 1rem;">
+            <label for="wineNotes">💬 Sua Opinião e Lembrança do Dia *</label>
+            <textarea id="wineNotes" rows="4" required placeholder="Conte com suas palavras: gostou do vinho? Achou fácil de beber? Como foi esse dia especial?"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="btnCancelForm">Cancelar</button>
+          <button type="submit" class="btn-primary">Salvar Avaliação no Diário</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: WINE DETAIL & MEMORY VIEW -->
+  <div id="wineDetailModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-container modal-detail">
+      <div id="wineDetailContent"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: CLOUD DATABASE SYNC -->
+  <div id="cloudModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-container modal-large" style="max-width: 660px;">
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">Sincronização Automática Celular &amp; PC</span>
+          <h2>⚡ Banco na Nuvem com Supabase</h2>
+        </div>
+        <button type="button" class="modal-close" id="btnCloseCloudModal">&times;</button>
+      </div>
+      <form id="cloudConfigForm" class="wine-form" style="gap: 1.15rem;">
+        <div class="cloud-guide-box">
+          <strong>Como conectar seu Supabase Gratuito (2 minutos):</strong>
+          <p>Com o Supabase conectado, tanto os vinhos avaliados quanto os vinhos da sua <strong>Adega Virtual</strong> ficam salvos na nuvem e sincronizam entre seu celular e computador.</p>
+          <details class="cloud-steps-details">
+            <summary>📖 Passo a passo no Supabase (Gratuito)</summary>
+            <ol>
+              <li>Crie um projeto gratuito em <a href="https://supabase.com/dashboard" target="_blank" rel="noopener">supabase.com/dashboard</a>.</li>
+              <li>No menu lateral esquerdo do Supabase, clique em <strong>SQL Editor</strong> → <strong>New Query</strong>.</li>
+              <li>
+                Clique no botão abaixo para copiar o script da tabela, cole lá no SQL Editor e clique em <strong>Run</strong>:
+                <div style="margin-top: 6px;">
+                  <button type="button" id="btnCopySupabaseSql" class="btn-secondary btn-sm">📋 Copiar Comando SQL da Tabela</button>
+                </div>
+              </li>
+              <li>Depois, vá em <strong>Project Settings (⚙️) → API</strong> e copie a <strong>Project URL</strong> e a chave pública <strong>Publishable / anon</strong>.</li>
+            </ol>
+          </details>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="cloudProvider">Provedor de Nuvem</label>
+            <select id="cloudProvider">
+              <option value="supabase">⚡ Supabase (PostgreSQL Nuvem)</option>
+              <option value="firebase">🔥 Google Firebase (Realtime DB)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="cloudCellarId">🔑 Código da Sua Adega Pessoal *</label>
+            <input type="text" id="cloudCellarId" required placeholder="Ex: adega-guilherme" />
+            <small class="field-hint">Use o mesmo código no celular e no PC</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cloudUrl">🌐 Project URL do Supabase *</label>
+          <input type="url" id="cloudUrl" required value="https://jsaspzuoqmwxbsjisiuy.supabase.co" placeholder="https://jsaspzuoqmwxbsjisiuy.supabase.co" />
+          <small class="field-hint" id="cloudUrlHint">URL do seu projeto já configurada!</small>
+        </div>
+
+        <div class="form-group" id="cloudApiKeyGroup">
+          <label for="cloudApiKey">🔒 API Key (Publishable / anon) do Supabase *</label>
+          <input type="password" id="cloudApiKey" value="sb_publishable_2_aQVNgyD2b7D2bBwFqgJg_RgKhiDq1" placeholder="Cole aqui sua chave anon public (eyJhbGci... ou sb_publishable_...)" />
+          <small class="field-hint">Chave do seu projeto já configurada!</small>
+        </div>
+
+        <div class="modal-footer" style="justify-content: space-between; flex-wrap: wrap;">
+          <button type="button" class="btn-danger" id="btnDisconnectCloud">Desconectar Nuvem</button>
+          <div style="display:flex; gap: 0.6rem;">
+            <button type="button" class="btn-secondary" id="btnSyncNow">🔄 Sincronizar Agora</button>
+            <button type="submit" class="btn-primary">⚡ Salvar &amp; Conectar Supabase</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: BACKUP & EXPORT/IMPORT -->
+  <div id="backupModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-container modal-small">
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">Segurança dos seus dados</span>
+          <h2>Backup &amp; Restauração</h2>
+        </div>
+        <button type="button" class="modal-close" id="btnCloseBackupModal">&times;</button>
+      </div>
+      <div class="backup-body">
+        <p>Você pode exportar um arquivo completo de backup (incluindo vinhos tomados e vinhos guardados na Adega Virtual) ou restaurar quando quiser.</p>
+        <div class="backup-actions">
+          <button type="button" id="btnExportJson" class="btn-primary full-width">
+            ⬇ Exportar Diário + Adega (.json com fotos)
+          </button>
+          <label class="btn-secondary full-width file-label-btn">
+            ⬆ Importar Arquivo de Backup (.json)
+            <input type="file" id="inputImportJson" accept=".json,application/json" class="file-input-hidden" />
+          </label>
+          <hr class="divider" />
+          <button type="button" id="btnLoadSamplesFromBackup" class="btn-ghost full-width">
+            ✨ Restaurar Exemplos Demonstrativos
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <script src="db.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>
